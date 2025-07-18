@@ -189,36 +189,47 @@ export const SearchIcon = (props: IconSvgProps) => (
 export const TwitchIcon = (props: IconSvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="lucide lucide-twitch-icon lucide-twitch"
+    viewBox="0 0 16 16"
+    width="1em"
+    height="1em"
     {...props}
   >
-    <path d="M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7" />
+    <path
+      fill="currentColor"
+      d="M1.5 0L0 2.5V14h4v2h2l2-2h2.5L15 9.5V0zM13 8.5L10.5 11H8l-2 2v-2H3V2h10z"
+    ></path>
+    <path fill="currentColor" d="M9.5 4H11v4H9.5zm-3 0H8v4H6.5z"></path>
   </svg>
 );
 
 export const YoutubeIcon = (props: IconSvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="lucide lucide-youtube-icon lucide-youtube"
+    width="1em"
+    height="1em"
     {...props}
   >
-    <path d="M22.54 6.42a3.05 3.05 0 0 0-2.14-2.14C18.4 4 12 4 12 4s-6.4 0-8.4.28a3.05 3.05 0 0 0-2.14 2.14C1 8.6 1 12 1 12s0 3.4.28 5.58a3.05 3.05 0 0 0 2.14 2.14C5.6 20 12 20 12 20s6.4 0 8.4-.28a3.05 3.05 0 0 0 2.14-2.14C23 15.4 23 12 23 12s0-3.4-.46-5.58z" />
-    <polygon points="9.75,15.02 15,12,9.75,8,9.75,15.02" />
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M21.7 8.037a4.26 4.26 0 0 0-.789-1.964a2.84 2.84 0 0 0-1.984-.839c-2.767-.2-6.926-.2-6.926-.2s-4.157 0-6.928.2a2.84 2.84 0 0 0-1.983.839a4.2 4.2 0 0 0-.79 1.965a30 30 0 0 0-.2 3.206v1.5a30 30 0 0 0 .2 3.206c.094.712.364 1.39.784 1.972c.604.536 1.38.837 2.187.848c1.583.151 6.731.2 6.731.2s4.161 0 6.928-.2a2.84 2.84 0 0 0 1.985-.84a4.3 4.3 0 0 0 .787-1.965a30 30 0 0 0 .2-3.206v-1.516a31 31 0 0 0-.202-3.206m-11.692 6.554v-5.62l5.4 2.819z"
+      clipRule="evenodd"
+    ></path>
+  </svg>
+);
+
+export const PeopleIcon = (props: IconSvgProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="1em"
+    height="1em"
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      d="M5.5 8a2.5 2.5 0 1 1 5 0a2.5 2.5 0 0 1-5 0M8 4a4 4 0 1 0 0 8a4 4 0 0 0 0-8m7.5 5a1.5 1.5 0 1 1 3 0a1.5 1.5 0 0 1-3 0M17 6a3 3 0 1 0 0 6a3 3 0 0 0 0-6m-2.752 13.038c.703.285 1.604.462 2.753.462c2.282 0 3.586-.697 4.297-1.558c.345-.418.52-.84.61-1.163a2.7 2.7 0 0 0 .093-.573v-.027A2.18 2.18 0 0 0 19.822 14H14.18q-.042 0-.082.002c.394.41.68.925.816 1.498h4.908c.372 0 .674.299.679.669l-.003.032q-.006.058-.037.18a1.6 1.6 0 0 1-.32.605c-.35.426-1.172 1.014-3.14 1.014c-.98 0-1.676-.146-2.17-.345c-.108.4-.286.883-.583 1.383M4.25 14A2.25 2.25 0 0 0 2 16.25v.278a2 2 0 0 0 .014.208a4.5 4.5 0 0 0 .778 2.07C3.61 19.974 5.172 21 8 21s4.39-1.025 5.208-2.195a4.5 4.5 0 0 0 .778-2.07a3 3 0 0 0 .014-.207v-.278A2.25 2.25 0 0 0 11.75 14zm-.75 2.507v-.257a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 .75.75v.257l-.007.08a3 3 0 0 1-.514 1.358C11.486 18.65 10.422 19.5 8 19.5s-3.486-.85-3.98-1.555a3 3 0 0 1-.513-1.358z"
+    ></path>
   </svg>
 );

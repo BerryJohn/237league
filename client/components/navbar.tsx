@@ -23,9 +23,11 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full " justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <p className="font-bold text-inherit bg-gradient-to-r from-white to-green-500 bg-clip-text text-transparent">
-              237League
-            </p>
+            <img
+              src="/brand/logo.png"
+              alt="237League Logo"
+              className="h-16 w-16"
+            />
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
