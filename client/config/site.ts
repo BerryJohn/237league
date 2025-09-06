@@ -5,8 +5,20 @@ export const siteConfig = {
   description: 'TBA - strona ligi simracingowej 237League',
   navItems: [
     {
-      label: 'Home',
+      label: 'Strona główna',
       href: '/',
+    },
+    {
+      label: 'Aktualności',
+      href: '/news',
+    },
+    {
+      label: 'Kierowcy',
+      href: '/drivers',
+    },
+    {
+      label: 'Kontakt',
+      href: '/contact',
     },
   ],
   navMenuItems: [

@@ -1,5 +1,7 @@
 import { tv } from 'tailwind-variants';
 
+export const leagueGreen = '#a6d719'; // -> don't know how to use it with tailwind-variants, its getting bugged while chaging theme
+
 export const title = tv({
   base: 'tracking-tight inline font-semibold',
   variants: {
@@ -49,5 +51,50 @@ export const subtitle = tv({
   },
   defaultVariants: {
     fullWidth: true,
+  },
+});
+
+export const typography = tv({
+  base: 'text-default-600',
+  variants: {
+    size: {
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+    },
+    weight: {
+      light: 'font-light',
+      normal: 'font-normal',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+      bold: 'font-bold',
+    },
+    color: {
+      default: 'text-default-600',
+      foreground: 'dark:text-default-100',
+      primary: 'text-primary',
+      secondary: 'text-secondary',
+      success: 'text-success',
+      warning: 'text-warning',
+      danger: 'text-danger',
+      leagueGreen: `text-[#a6d719]`,
+    },
+    align: {
+      left: 'text-left',
+      center: 'text-center',
+      right: 'text-right',
+      justify: 'text-justify',
+    },
+    truncate: { true: 'truncate' },
+    uppercase: { true: 'uppercase' },
+  },
+  defaultVariants: {
+    size: 'md',
+    weight: 'normal',
+    color: 'default',
+    align: 'left',
+    truncate: false,
+    uppercase: false,
   },
 });
