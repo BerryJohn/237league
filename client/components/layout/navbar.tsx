@@ -10,6 +10,7 @@ import NextLink from 'next/link';
 
 import { siteConfig } from '@/config/site';
 import { ThemeSwitch } from '@/components/theme-switch';
+import LocaleSwitcher from '@/components/locale-switcher';
 import {
   DiscordIcon,
   HeartFilledIcon,
@@ -54,19 +55,8 @@ export const Navbar = () => {
             </Link>
           ))}
 
+          <LocaleSwitcher />
           <ThemeSwitch />
-        </NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Patronite
-          </Button>
         </NavbarItem>
         <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="flat">

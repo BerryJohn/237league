@@ -1,0 +1,20 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close"
+  },
+  "welcome": {
+    "title": "Welcome to 237 League",
+    "description": "The ultimate Polish racing league experience"
+  }
+}

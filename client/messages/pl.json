@@ -1,0 +1,20 @@
+{
+  "navigation": {
+    "home": "Strona główna",
+    "about": "O nas",
+    "contact": "Kontakt"
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "close": "Zamknij"
+  },
+  "welcome": {
+    "title": "Witaj w 237 League",
+    "description": "Najlepsza liga wyścigowa w Polsce"
+  }
+}
