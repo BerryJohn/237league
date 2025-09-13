@@ -326,3 +326,29 @@ export interface SeasonFilters {
   status?: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
   category?: string;
 }
+
+// News-related types
+export interface NewsArticle {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  imageUrl: string;
+  author: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
+  category:
+    | 'race-results'
+    | 'announcements'
+    | 'driver-spotlight'
+    | 'technical'
+    | 'general';
+  tags: string[];
+  publishedAt: Date;
+  updatedAt: Date;
+  isPublished: boolean;
+  isFeatured: boolean;
+  viewCount: number;
+}
