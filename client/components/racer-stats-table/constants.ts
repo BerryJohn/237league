@@ -1,0 +1,165 @@
+import { RacerStats, TableColumn } from './types';
+
+// Table column configuration
+export const columns: TableColumn[] = [
+  {
+    key: 'overallRating',
+    label: 'RATING',
+    sortable: true,
+  },
+  {
+    key: 'name',
+    label: 'RACER',
+    sortable: true,
+  },
+  {
+    key: 'skillLevel',
+    label: 'SKILL LEVEL',
+    sortable: true,
+  },
+  {
+    key: 'suggestedSplit',
+    label: 'SPLIT',
+    sortable: true,
+  },
+  {
+    key: 'paceRating',
+    label: 'PACE',
+    sortable: true,
+  },
+  {
+    key: 'consistencyRating',
+    label: 'CONSISTENCY',
+    sortable: true,
+  },
+  {
+    key: 'safetyRating',
+    label: 'SAFETY',
+    sortable: true,
+  },
+  {
+    key: 'incidentRate',
+    label: 'INCIDENTS',
+    sortable: true,
+  },
+  {
+    key: 'totalRaces',
+    label: 'RACES',
+    sortable: true,
+  },
+  {
+    key: 'status',
+    label: 'STATUS',
+    sortable: true,
+  },
+];
+
+// Color mappings for different status types
+export const statusColorMap = {
+  active: 'success',
+  inactive: 'default',
+  probation: 'warning',
+} as const;
+
+// Color mappings for skill levels
+export const skillLevelColorMap = {
+  Beginner: 'default',
+  Intermediate: 'primary',
+  Advanced: 'secondary',
+  Expert: 'success',
+  Pro: 'warning',
+} as const;
+
+// Sample data for demonstration
+export const defaultRacerData: RacerStats[] = [
+  {
+    id: '1',
+    name: 'Alex Hamilton',
+    overallRating: 94,
+    skillLevel: 'Pro',
+    suggestedSplit: 'Split 1',
+    totalRaces: 24,
+    paceRating: 96,
+    racecraftRating: 91,
+    consistencyRating: 89,
+    safetyRating: 98,
+    bestLapTime: '1:23.456',
+    averageLapTime: '1:27.892',
+    incidentRate: 0.2,
+    status: 'active',
+    team: 'Thunder Racing',
+    avatar: 'https://i.pravatar.cc/40?u=alex',
+  },
+  {
+    id: '2',
+    name: 'Maria Santos',
+    overallRating: 87,
+    skillLevel: 'Expert',
+    suggestedSplit: 'Split 1',
+    totalRaces: 24,
+    paceRating: 88,
+    racecraftRating: 85,
+    consistencyRating: 90,
+    safetyRating: 85,
+    bestLapTime: '1:24.123',
+    averageLapTime: '1:28.345',
+    incidentRate: 0.8,
+    status: 'active',
+    team: 'Lightning Bolts',
+    avatar: 'https://i.pravatar.cc/40?u=maria',
+  },
+  {
+    id: '3',
+    name: 'David Chen',
+    overallRating: 76,
+    skillLevel: 'Advanced',
+    suggestedSplit: 'Split 2',
+    totalRaces: 22,
+    paceRating: 78,
+    racecraftRating: 82,
+    consistencyRating: 71,
+    safetyRating: 74,
+    bestLapTime: '1:25.789',
+    averageLapTime: '1:29.567',
+    incidentRate: 1.4,
+    status: 'active',
+    team: 'Speed Demons',
+    avatar: 'https://i.pravatar.cc/40?u=david',
+  },
+  {
+    id: '4',
+    name: 'Sarah Johnson',
+    overallRating: 65,
+    skillLevel: 'Intermediate',
+    suggestedSplit: 'Split 3',
+    totalRaces: 20,
+    paceRating: 68,
+    racecraftRating: 61,
+    consistencyRating: 72,
+    safetyRating: 88,
+    bestLapTime: '1:26.234',
+    averageLapTime: '1:30.123',
+    incidentRate: 0.5,
+    status: 'active',
+    team: 'Velocity Masters',
+    avatar: 'https://i.pravatar.cc/40?u=sarah',
+  },
+  {
+    id: '5',
+    name: 'Marcus Rodriguez',
+    overallRating: 43,
+    skillLevel: 'Beginner',
+    suggestedSplit: 'Split 4',
+    totalRaces: 18,
+    paceRating: 45,
+    racecraftRating: 48,
+    consistencyRating: 38,
+    safetyRating: 41,
+    bestLapTime: '1:27.456',
+    averageLapTime: '1:31.789',
+    incidentRate: 3.2,
+    status: 'probation',
+    team: 'Turbo Force',
+    avatar: 'https://i.pravatar.cc/40?u=marcus',
+  },
+];
