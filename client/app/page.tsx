@@ -1,5 +1,4 @@
 import { title, typography, leagueGreen } from '@/components/primitives';
-import { EventProps } from '@/components//event';
 import Post from '@/components/post';
 
 export default function Home() {
@@ -57,64 +56,6 @@ export default function Home() {
         />
         <Post author="237League" />
       </div>
-
-      {/* TODO: Carousel / overflow in case of larger amount of races */}
-      {/* <div className="flex gap-4 ">
-        {events.map((event, index) => (
-          <Event
-            key={index}
-            title={event.title}
-            date={event.date}
-            hour={event.hour}
-            track={event.track}
-            participants={event.participants}
-            maxParticipants={event.maxParticipants}
-            imageUrl={event.imageUrl}
-            raceLength={event.raceLength}
-            raceType={event.raceType}
-            classes={event.classes}
-          />
-        ))}
-      </div> */}
     </section>
   );
 }
-
-const events: EventProps[] = [
-  {
-    title: 'Ring Rumble',
-    date: '2024-01-01',
-    hour: '20:00',
-    track: 'Monza',
-    participants: 47,
-    maxParticipants: 50,
-    imageUrl: 'https://cdn.thesimgrid.com/1cx7ofxzoq2hbsyvyn553sztxnzs',
-    raceLength: '75min',
-    raceType: 'Multiclass',
-    classes: ['Hypercar', 'LMGT3', 'LMP2'],
-  },
-  {
-    title: 'Spa Showdown',
-    date: '2024-02-15',
-    hour: '19:00',
-    track: 'Spa-Francorchamps',
-    participants: 30,
-    maxParticipants: 50,
-    imageUrl: 'https://cdn.thesimgrid.com/1cx7ofxzoq2hbsyvyn553sztxnzs',
-    raceLength: '90min',
-    raceType: 'Single Class',
-    classes: ['GT3'],
-  },
-  {
-    title: 'Nordschleife Challenge',
-    date: '2024-03-10',
-    hour: '21:00',
-    track: 'Nordschleife',
-    participants: 25,
-    maxParticipants: 40,
-    imageUrl: 'https://cdn.thesimgrid.com/1cx7ofxzoq2hbsyvyn553sztxnzs',
-    raceLength: '120min',
-    raceType: 'Multiclass',
-    classes: ['Hypercar', 'GTE'],
-  },
-];

@@ -21,34 +21,31 @@ export const RacerStatsTable: React.FC<RacerStatsTableProps> = ({
   title = 'Racer Performance Analysis',
 }) => {
   // Use custom hooks for filtering and sorting
-  const {
-    filterValue,
-    filteredItems,
-    onSearchChange,
-    onClear,
-  } = useTableFiltering(racers);
+  const { filterValue, filteredItems, onSearchChange, onClear } =
+    useTableFiltering(racers);
 
-  const {
-    sortDescriptor,
-    setSortDescriptor,
-    sortedItems,
-  } = useTableSorting(filteredItems);
+  const { sortDescriptor, setSortDescriptor, sortedItems } =
+    useTableSorting(filteredItems);
 
   // Memoize the cell renderer
   const renderCell = React.useCallback(
-    (racer: RacerStats, columnKey: React.Key) => renderTableCell(racer, columnKey),
+    (racer: RacerStats, columnKey: React.Key) =>
+      renderTableCell(racer, columnKey),
     []
   );
 
   // Memoize the top content (search)
-  const topContent = React.useMemo(() => (
-    <TableSearch
-      filterValue={filterValue}
-      onSearchChange={onSearchChange}
-      onClear={onClear}
-      totalCount={racers.length}
-    />
-  ), [filterValue, onSearchChange, onClear, racers.length]);
+  const topContent = React.useMemo(
+    () => (
+      <TableSearch
+        filterValue={filterValue}
+        onSearchChange={onSearchChange}
+        onClear={onClear}
+        totalCount={racers.length}
+      />
+    ),
+    [filterValue, onSearchChange, onClear, racers.length]
+  );
 
   return (
     <div className="w-full">
@@ -56,7 +53,8 @@ export const RacerStatsTable: React.FC<RacerStatsTableProps> = ({
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-foreground mb-2">{title}</h2>
         <p className="text-sm text-default-500">
-          Racer skill assessment and split recommendations based on performance analytics
+          Racer skill assessment and split recommendations based on performance
+          analytics
         </p>
       </div>
 
@@ -83,10 +81,7 @@ export const RacerStatsTable: React.FC<RacerStatsTableProps> = ({
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody 
-          items={sortedItems}
-          emptyContent={'No racers found'}
-        >
+        <TableBody items={sortedItems} emptyContent={'No racers found'}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
