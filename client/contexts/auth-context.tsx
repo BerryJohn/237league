@@ -32,13 +32,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuthStatus = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:3001/auth/me', {
-        credentials: 'include', // Include cookies
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `http://localhost:${process.env.BACKEND_PORT}/auth/me`,
+        {
+          credentials: 'include', // Include cookies
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (response.ok) {
         const userData = await response.json();
@@ -56,12 +59,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = () => {
     // Redirect to Steam login
-    window.location.href = 'http://localhost:3001/auth/steam';
+    window.location.href = `http://localhost:${process.env.BACKEND_PORT}/auth/steam`;
   };
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:3001/auth/logout', {
+      await fetch(`http://localhost:${process.env.BACKEND_PORT}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
         headers: {

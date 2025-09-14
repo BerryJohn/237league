@@ -24,13 +24,16 @@ export class TokenManager {
     refreshToken: string;
   } | null> {
     try {
-      const response = await fetch('http://localhost:3001/auth/login-tokens', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `http://localhost:${process.env.BACKEND_PORT}/auth/login-tokens`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (response.ok) {
         return await response.json();
@@ -81,13 +84,16 @@ export class TokenManager {
   // Method 5: Refresh tokens when needed
   static async refreshAccessToken(): Promise<boolean> {
     try {
-      const response = await fetch('http://localhost:3001/auth/refresh', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `http://localhost:${process.env.BACKEND_PORT}/auth/refresh`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       return response.ok;
     } catch (error) {
@@ -102,7 +108,7 @@ export const authUtils = {
   // Recommended: Use cookies (most secure)
   async getCurrentUser() {
     return TokenManager.makeAuthenticatedRequest(
-      'http://localhost:3001/auth/me'
+      `http://localhost:${process.env.BACKEND_PORT}/auth/me`
     );
   },
 
@@ -116,7 +122,7 @@ export const authUtils = {
   // Alternative: Use Authorization header
   async getCurrentUserWithBearer() {
     return TokenManager.makeRequestWithBearerToken(
-      'http://localhost:3001/auth/me'
+      `http://localhost:${process.env.BACKEND_PORT}/auth/me`
     );
   },
 };
