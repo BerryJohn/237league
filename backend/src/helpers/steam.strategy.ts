@@ -6,9 +6,9 @@ import { Injectable } from '@nestjs/common';
 export class SteamStrategy extends PassportStrategy(Strategy, 'steam') {
   constructor() {
     super({
-      returnURL: `http://localhost:${process.env.PORT || 3000}/auth/steam/return`,
-      realm: 'http://localhost:3000/',
-      apiKey: process.env.STEAM_API_KEY ?? 'SETUP_ME',
+      returnURL: `http://localhost:${process.env.PORT || 6969}/auth/steam/return`,
+      realm: `http://localhost:${process.env.PORT || 6969}/`,
+      apiKey: process.env.STEAM_API_KEY ?? '6969',
     });
   }
 

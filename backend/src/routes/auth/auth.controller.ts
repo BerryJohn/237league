@@ -1,5 +1,6 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import type { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -11,11 +12,9 @@ export class AuthController {
 
   @Get('steam/return')
   @UseGuards(AuthGuard('steam'))
-  steamLoginCallback(@Req() req: any) {
-    return {
-      success: true,
-      message: 'Steam authentication successful',
-      user: req.user,
-    };
+  steamLoginCallback(@Req() req: any, @Res() res: Response) {
+    const user = req.user;
+
+    res.redirect(`http://localhost:3000/?auth=success&steamId=${user.id}`);
   }
 }

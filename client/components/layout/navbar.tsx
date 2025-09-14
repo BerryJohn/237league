@@ -30,7 +30,7 @@ export const Navbar = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <img
-              src="/brand/logo.png"
+              src="./../brand/logo.png"
               alt="237League Logo"
               className="h-16 w-16"
             />
@@ -57,7 +57,12 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
+          <Button
+            as={Link}
+            color="primary"
+            href="http://localhost:3001/auth/steam"
+            variant="flat"
+          >
             Zaloguj przez Steam
           </Button>
         </NavbarItem>
