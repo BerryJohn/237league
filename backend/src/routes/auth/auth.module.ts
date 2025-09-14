@@ -1,11 +1,28 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
-import { SteamStrategy } from 'src/helpers/steam.strategy';
+import { AuthService } from './auth.service';
+import { SteamStrategy } from '../../helpers/steam.strategy';
+import { TokenService } from '../../services/token.service';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'steam' })],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'steam' }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET', 'your-secret-key'),
+        signOptions: { expiresIn: '24h' },
+      }),
+    }),
+    ConfigModule,
+  ],
   controllers: [AuthController],
-  providers: [SteamStrategy],
+  providers: [AuthService, SteamStrategy, TokenService, JwtAuthGuard],
+  exports: [AuthService, TokenService, JwtAuthGuard],
 })
 export class AuthModule {}

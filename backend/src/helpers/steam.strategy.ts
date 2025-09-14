@@ -8,7 +8,7 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steam') {
     super({
       returnURL: `http://localhost:${process.env.PORT || 6969}/auth/steam/return`,
       realm: `http://localhost:${process.env.PORT || 6969}/`,
-      apiKey: process.env.STEAM_API_KEY ?? '6969',
+      apiKey: process.env.STEAM_API_KEY ?? 'SET_UP_ME',
     });
   }
 

@@ -1,9 +1,21 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+  Body,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import type { Response } from 'express';
+import type { Response, Request } from 'express';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
   @Get('steam')
   @UseGuards(AuthGuard('steam'))
   async steamLogin() {
@@ -12,9 +24,111 @@ export class AuthController {
 
   @Get('steam/return')
   @UseGuards(AuthGuard('steam'))
-  steamLoginCallback(@Req() req: any, @Res() res: Response) {
-    const user = req.user;
+  async steamLoginCallback(@Req() req: any, @Res() res: Response) {
+    try {
+      // Find or create user from Steam profile
+      const user = await this.authService.findOrCreateUser(req.user);
 
-    res.redirect(`http://localhost:3000/?auth=success&steamId=${user.id}`);
+      // Generate JWT tokens
+      const { accessToken, refreshToken } =
+        await this.authService.loginUser(user);
+
+      // Set secure HTTP-only cookies
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      });
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
+      // Redirect to client with success indicator
+      res.redirect(`http://localhost:3000/?auth=success`);
+    } catch (error) {
+      console.error('Steam login error:', error);
+      res.redirect(`http://localhost:3000/?auth=error`);
+    }
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getCurrentUser(@Req() req: any) {
+    return req.user;
+  }
+
+  @Post('refresh')
+  async refreshTokens(@Req() req: Request, @Res() res: Response) {
+    try {
+      const refreshToken = req.cookies?.refreshToken;
+
+      if (!refreshToken) {
+        return res.status(401).json({ message: 'Refresh token not found' });
+      }
+
+      const tokens = await this.authService.refreshTokens(refreshToken);
+
+      if (!tokens) {
+        return res.status(401).json({ message: 'Invalid refresh token' });
+      }
+
+      // Set new cookies
+      res.cookie('accessToken', tokens.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      res.cookie('refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.json({ message: 'Tokens refreshed successfully' });
+    } catch (error) {
+      return res.status(500).json({ message: 'Token refresh failed' });
+    }
+  }
+
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    return res.json({ message: 'Logged out successfully' });
+  }
+
+  @Post('login-tokens')
+  @UseGuards(JwtAuthGuard)
+  async getTokens(
+    @Req() req: any,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    // Generate new tokens for the authenticated user
+    const { accessToken, refreshToken } = await this.authService.loginUser(
+      req.user,
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  @Get('token-info')
+  @UseGuards(JwtAuthGuard)
+  async getTokenInfo(@Req() req: any) {
+    return {
+      user: req.user,
+      tokenPayload: req.tokenPayload,
+      isValid: true,
+      expiresAt: new Date(req.tokenPayload.exp * 1000),
+    };
   }
 }
