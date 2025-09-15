@@ -15,5 +15,8 @@ export const swaggerConfig = new DocumentBuilder()
     },
     'JWT-auth',
   )
-  .addServer('http://localhost:3000', 'Local dev server')
+  .addServer(
+    `http://localhost:${process.env.BACKEND_PORT ?? 6969}`,
+    'Local dev server',
+  )
   .build();

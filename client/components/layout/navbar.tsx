@@ -36,7 +36,7 @@ export const Navbar = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <img
-              src="./../brand/logo.png"
+              src="/brand/logo.png"
               alt="237League Logo"
               className="h-16 w-16"
             />

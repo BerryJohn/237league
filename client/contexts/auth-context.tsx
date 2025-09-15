@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:${process.env.BACKEND_PORT}/auth/me`,
+        `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/me`,
         {
           credentials: 'include', // Include cookies
           method: 'GET',
@@ -59,18 +59,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = () => {
     // Redirect to Steam login
-    window.location.href = `http://localhost:${process.env.BACKEND_PORT}/auth/steam`;
+    window.location.href = `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/steam`;
   };
 
   const logout = async () => {
     try {
-      await fetch(`http://localhost:${process.env.BACKEND_PORT}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      await fetch(
+        `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/logout`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {

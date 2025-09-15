@@ -25,7 +25,7 @@ export class TokenManager {
   } | null> {
     try {
       const response = await fetch(
-        `http://localhost:${process.env.BACKEND_PORT}/auth/login-tokens`,
+        `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/login-tokens`,
         {
           method: 'POST',
           credentials: 'include',
@@ -85,7 +85,7 @@ export class TokenManager {
   static async refreshAccessToken(): Promise<boolean> {
     try {
       const response = await fetch(
-        `http://localhost:${process.env.BACKEND_PORT}/auth/refresh`,
+        `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/refresh`,
         {
           method: 'POST',
           credentials: 'include',
@@ -108,7 +108,7 @@ export const authUtils = {
   // Recommended: Use cookies (most secure)
   async getCurrentUser() {
     return TokenManager.makeAuthenticatedRequest(
-      `http://localhost:${process.env.BACKEND_PORT}/auth/me`
+      `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/me`
     );
   },
 
@@ -122,7 +122,7 @@ export const authUtils = {
   // Alternative: Use Authorization header
   async getCurrentUserWithBearer() {
     return TokenManager.makeRequestWithBearerToken(
-      `http://localhost:${process.env.BACKEND_PORT}/auth/me`
+      `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/me`
     );
   },
 };
