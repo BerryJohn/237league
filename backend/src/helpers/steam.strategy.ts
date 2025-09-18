@@ -14,9 +14,12 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steam') {
       throw new Error('STEAM_API_KEY is not set in environment variables');
     }
 
+    const backendUrl =
+      configService.get('BACKEND_URL') || `http://localhost:${port}`;
+
     super({
-      returnURL: `http://localhost:${port}/auth/steam/return`,
-      realm: `http://localhost:${port}/`,
+      returnURL: `${backendUrl}/auth/steam/return`,
+      realm: backendUrl,
       apiKey: apiKey,
     });
   }

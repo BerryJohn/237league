@@ -39,25 +39,3 @@ export class TokenManager {
     }
   }
 }
-
-// Usage examples:
-export const authUtils = {
-  // Recommended: Use cookies (most secure)
-  async getCurrentUser() {
-    return TokenManager.makeAuthenticatedRequest(
-      `${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/auth/me`
-    );
-  },
-
-  // Get user profile
-  async getUserProfile() {
-    return TokenManager.makeAuthenticatedRequest(
-      `${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/auth/me`
-    );
-  },
-
-  // Refresh authentication
-  async refreshAuth() {
-    return TokenManager.refreshAccessToken();
-  },
-};
