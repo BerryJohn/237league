@@ -1,8 +1,9 @@
-import { IsString, IsInt, IsOptional, IsUrl, Length } from 'class-validator';
+import { IsString, IsOptional, IsUrl, Length, IsDate } from 'class-validator';
 
 export class CreateUserDto {
+  @IsOptional()
   @IsString()
-  id: string;
+  id?: string;
 
   @IsString()
   steamId: string;
@@ -14,56 +15,39 @@ export class CreateUserDto {
   @IsString()
   avatar: string;
 
-  @IsInt()
-  communityVisibilityState: number;
-
-  @IsInt()
-  profileState: number;
-
   @IsString()
   @Length(1, 100)
   personaName: string;
 
-  @IsInt()
-  commentPermission: number;
-
   @IsString()
   @IsUrl()
-  profileUrl: string;
-
-  @IsString()
-  avatarMedium: string;
-
-  @IsString()
-  avatarFull: string;
+  steamProfileUrl: string;
 
   @IsString()
   avatarHash: string;
 
-  @IsInt()
-  lastLogoff: number;
-
-  @IsInt()
-  personaState: number;
-
-  @IsOptional()
-  @IsString()
-  @Length(1, 100)
-  realName?: string;
-
-  @IsOptional()
-  @IsString()
-  @Length(1, 100)
-  primaryClanId?: string;
-
-  @IsInt()
-  timeCreated: number;
-
-  @IsInt()
-  personaStateFlags: number;
-
-  @IsOptional()
-  @IsString()
-  @Length(1, 10)
-  locCountryCode?: string;
+  @IsDate()
+  createdAt: Date;
 }
+
+// {
+//     "id": "4a88b467-eddc-421a-9b77-ba63db36523e",
+//     "steamId": "76561198034682439",
+//     "displayName": "Wekyc",
+//     "avatar": "https://avatars.steamstatic.com/bd7faa873307f1a04616810a9a202a2e69b5f814.jpg",
+//     "communityVisibilityState": 3,
+//     "profileState": 1,
+//     "personaName": "Wekyc",
+//     "commentPermission": 1,
+//     "profileUrl": "https://steamcommunity.com/id/Wekyc/",
+//     "avatarMedium": "https://avatars.steamstatic.com/bd7faa873307f1a04616810a9a202a2e69b5f814_medium.jpg",
+//     "avatarFull": "https://avatars.steamstatic.com/bd7faa873307f1a04616810a9a202a2e69b5f814_full.jpg",
+//     "avatarHash": "bd7faa873307f1a04616810a9a202a2e69b5f814",
+//     "lastLogoff": 1758189957,
+//     "personaState": 1,
+//     "realName": "Juano Pablito",
+//     "primaryClanId": "103582791455292672",
+//     "timeCreated": 1291730198,
+//     "personaStateFlags": 0,
+//     "locCountryCode": "FI"
+// }

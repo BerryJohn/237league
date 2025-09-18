@@ -1,4 +1,4 @@
-export type SteamData = {
+export type SteamUserData = {
   provider: string;
   _json: userData;
   id: string;

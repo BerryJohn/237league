@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EventModule } from './routes/events/events.module';
 import { AuthModule } from './routes/auth/auth.module';
-import { UserModule } from './routes/users/user.module';
+import { UsersModule } from './routes/users/users.module';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { UserModule } from './routes/users/user.module';
     }),
     EventModule,
     AuthModule,
-    UserModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
