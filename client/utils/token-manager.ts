@@ -115,7 +115,6 @@ export const authUtils = {
   // Alternative: Get tokens if you need them
   async getMyTokens() {
     const tokens = await TokenManager.getTokens();
-    console.log('My tokens:', tokens);
     return tokens;
   },
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { TokenManager } from '../utils/token-manager';
 
 interface User {
   id: string;
@@ -32,26 +33,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuthStatus = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(
+      // Try to refresh token first
+      await TokenManager.refreshAccessToken();
+      const response = await TokenManager.makeAuthenticatedRequest(
         `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/me`,
         {
-          credentials: 'include', // Include cookies
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
         }
       );
-
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
       } else {
         setUser(null);
+        TokenManager.clearTokensFromStorage();
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       setUser(null);
+      TokenManager.clearTokensFromStorage();
     } finally {
       setIsLoading(false);
     }
@@ -64,16 +64,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch(
+      await TokenManager.makeAuthenticatedRequest(
         `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/logout`,
         {
           method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
         }
       );
+      TokenManager.clearTokensFromStorage();
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
@@ -91,8 +88,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (authStatus === 'success') {
       // Remove auth param from URL
       window.history.replaceState({}, document.title, window.location.pathname);
-      // Recheck auth status to get user data
-      checkAuthStatus();
+      // Get tokens and save them if available
+      TokenManager.getTokens().then((tokens) => {
+        if (tokens) {
+          TokenManager.setTokensInStorage(
+            tokens.accessToken,
+            tokens.refreshToken
+          );
+        }
+        checkAuthStatus();
+      });
     } else if (authStatus === 'error') {
       console.error('Authentication failed');
       window.history.replaceState({}, document.title, window.location.pathname);
