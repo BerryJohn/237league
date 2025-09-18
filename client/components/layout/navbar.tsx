@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Navbar as HeroUINavbar,
   NavbarContent,
@@ -6,6 +8,7 @@ import {
 } from '@heroui/navbar';
 import { Button } from '@heroui/button';
 import { Link } from '@heroui/link';
+import { Avatar } from '@heroui/avatar';
 import NextLink from 'next/link';
 
 import { siteConfig } from '@/config/site';
@@ -17,8 +20,11 @@ import {
   YoutubeIcon,
 } from '@/components/icons';
 import { typography } from '../primitives';
+import { useAuth } from '@/contexts/auth-context';
 
 export const Navbar = () => {
+  const { user, isAuthenticated, login, logout, isLoading } = useAuth();
+
   return (
     <HeroUINavbar
       maxWidth="full"
@@ -57,9 +63,27 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Zaloguj przez Steam
-          </Button>
+          {isLoading ? (
+            <Button isLoading variant="flat">
+              Loading...
+            </Button>
+          ) : isAuthenticated && user ? (
+            <div className="flex items-center gap-3">
+              <Avatar
+                src={user.avatar.medium}
+                alt={user.displayName}
+                size="sm"
+              />
+              <span className="text-sm">{user.displayName}</span>
+              <Button color="danger" variant="light" size="sm" onPress={logout}>
+                Wyloguj
+              </Button>
+            </div>
+          ) : (
+            <Button color="primary" variant="flat" onPress={login}>
+              Zaloguj przez Steam
+            </Button>
+          )}
         </NavbarItem>
       </NavbarContent>
     </HeroUINavbar>
