@@ -66,10 +66,7 @@ export class TokenService {
         );
       }
       return this.jwtService.verify(token, {
-        secret: this.configService.get<string>(
-          'JWT_REFRESH_SECRET',
-          jwtRefreshSecret,
-        ),
+        secret: jwtRefreshSecret,
       }) as { sub: string };
     } catch (error) {
       return null;

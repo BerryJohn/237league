@@ -76,6 +76,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @UseGuards(JwtAuthGuard)
   async refreshTokens(@Req() req: Request, @Res() res: Response) {
     try {
       const refreshToken = req.cookies?.refreshToken;
