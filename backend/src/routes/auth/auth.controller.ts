@@ -119,22 +119,6 @@ export class AuthController {
     return res.json({ message: 'Logged out successfully' });
   }
 
-  @Post('login-tokens')
-  @UseGuards(JwtAuthGuard)
-  async getTokens(
-    @Req() req: any,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
-    // Generate new tokens for the authenticated user
-    const { accessToken, refreshToken } = await this.authService.loginUser(
-      req.user,
-    );
-
-    return {
-      accessToken,
-      refreshToken,
-    };
-  }
-
   @Get('token-info')
   @UseGuards(JwtAuthGuard)
   async getTokenInfo(@Req() req: any) {

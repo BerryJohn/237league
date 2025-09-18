@@ -17,18 +17,11 @@ export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    // Get token from cookies or Authorization header
-    let token = request.cookies?.accessToken;
+    // Get token from secure httpOnly cookies only
+    const token = request.cookies?.accessToken;
 
     if (!token) {
-      const authHeader = request.headers.authorization;
-      if (authHeader && authHeader.startsWith('Bearer ')) {
-        token = authHeader.substring(7);
-      }
-    }
-
-    if (!token) {
-      throw new UnauthorizedException('Access token not found');
+      throw new UnauthorizedException('Access token not found in cookies');
     }
 
     try {

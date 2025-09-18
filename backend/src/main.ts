@@ -12,7 +12,7 @@ async function bootstrap() {
 
   // Enable CORS for development
   app.enableCors({
-    origin: 'http://localhost:3000', // Client URL
+    origin: process.env.CLIENT_URL, // Client URL
     credentials: true, // Allow cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Try to refresh token first
       await TokenManager.refreshAccessToken();
       const response = await TokenManager.makeAuthenticatedRequest(
-        `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/me`,
+        `${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/auth/me`,
         {
           method: 'GET',
         }
@@ -46,12 +46,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(userData);
       } else {
         setUser(null);
-        TokenManager.clearTokensFromStorage();
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       setUser(null);
-      TokenManager.clearTokensFromStorage();
     } finally {
       setIsLoading(false);
     }
@@ -59,18 +57,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = () => {
     // Redirect to Steam login
-    window.location.href = `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/steam`;
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/auth/steam`;
   };
 
   const logout = async () => {
     try {
       await TokenManager.makeAuthenticatedRequest(
-        `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}/auth/logout`,
+        `${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/auth/logout`,
         {
           method: 'POST',
         }
       );
-      TokenManager.clearTokensFromStorage();
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
@@ -88,16 +85,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (authStatus === 'success') {
       // Remove auth param from URL
       window.history.replaceState({}, document.title, window.location.pathname);
-      // Get tokens and save them if available
-      TokenManager.getTokens().then((tokens) => {
-        if (tokens) {
-          TokenManager.setTokensInStorage(
-            tokens.accessToken,
-            tokens.refreshToken
-          );
-        }
-        checkAuthStatus();
-      });
+      // Check auth status after successful Steam login
+      checkAuthStatus();
     } else if (authStatus === 'error') {
       console.error('Authentication failed');
       window.history.replaceState({}, document.title, window.location.pathname);
