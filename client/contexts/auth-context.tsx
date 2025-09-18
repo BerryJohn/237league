@@ -76,9 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    checkAuthStatus();
-
-    // Check for auth success/error in URL params
+    // Check for auth success/error in URL params first
     const urlParams = new URLSearchParams(window.location.search);
     const authStatus = urlParams.get('auth');
 
@@ -90,6 +88,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } else if (authStatus === 'error') {
       console.error('Authentication failed');
       window.history.replaceState({}, document.title, window.location.pathname);
+      setIsLoading(false);
+    } else {
+      // Only check auth status if there's no auth parameter
+      checkAuthStatus();
     }
   }, []);
 
