@@ -49,6 +49,7 @@ export class JwtAuthGuard implements CanActivate {
 
       return true;
     } catch (error) {
+      console.error('JWT Auth Guard error:', error);
       throw new UnauthorizedException('Token validation failed');
     }
   }

@@ -11,10 +11,14 @@ import { AuthGuard } from '@nestjs/passport';
 import type { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('steam')
   @UseGuards(AuthGuard('steam'))
@@ -48,11 +52,20 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
+      const clientUrl = this.configService.get('CLIENT_URL');
+      if (!clientUrl) {
+        throw new Error('CLIENT_URL is not set in environment variables');
+      }
       // Redirect to client with success indicator
-      res.redirect(`http://localhost:3000/?auth=success`);
+      res.redirect(`${clientUrl}/?auth=success`);
     } catch (error) {
+      const clientUrl = this.configService.get('CLIENT_URL');
+      if (!clientUrl) {
+        throw new Error('CLIENT_URL is not set in environment variables');
+      }
+
       console.error('Steam login error:', error);
-      res.redirect(`http://localhost:3000/?auth=error`);
+      res.redirect(`${clientUrl}/?auth=error`);
     }
   }
 

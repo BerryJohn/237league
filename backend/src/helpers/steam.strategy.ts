@@ -1,14 +1,23 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-steam';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SteamStrategy extends PassportStrategy(Strategy, 'steam') {
-  constructor() {
+  constructor(private readonly configService: ConfigService) {
+    const port = configService.get('PORT', 6969);
+
+    const apiKey = configService.get('STEAM_API_KEY');
+
+    if (!apiKey) {
+      throw new Error('STEAM_API_KEY is not set in environment variables');
+    }
+
     super({
-      returnURL: `http://localhost:${process.env.PORT || 6969}/auth/steam/return`,
-      realm: `http://localhost:${process.env.PORT || 6969}/`,
-      apiKey: process.env.STEAM_API_KEY ?? 'SET_UP_ME',
+      returnURL: `http://localhost:${port}/auth/steam/return`,
+      realm: `http://localhost:${port}/`,
+      apiKey: apiKey,
     });
   }
 

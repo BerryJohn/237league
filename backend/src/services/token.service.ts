@@ -17,28 +17,39 @@ export class TokenService {
       displayName: user.displayName,
     };
 
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+    if (!jwtSecret) {
+      throw new Error('JWT_SECRET is not set in environment variables');
+    }
     return this.jwtService.sign(payload, {
       expiresIn: '24h',
-      secret: this.configService.get<string>('JWT_SECRET', 'your-secret-key'),
+      secret: jwtSecret,
     });
   }
 
   generateRefreshToken(user: User): string {
     const payload = { sub: user.id };
+    const jwtRefreshSecret =
+      this.configService.get<string>('JWT_REFRESH_SECRET');
+
+    if (!jwtRefreshSecret) {
+      throw new Error('JWT_REFRESH_SECRET is not set in environment variables');
+    }
 
     return this.jwtService.sign(payload, {
       expiresIn: '7d',
-      secret: this.configService.get<string>(
-        'JWT_REFRESH_SECRET',
-        'your-refresh-secret',
-      ),
+      secret: jwtRefreshSecret,
     });
   }
 
   verifyAccessToken(token: string): JwtPayload | null {
     try {
+      const jwtSecret = this.configService.get<string>('JWT_SECRET');
+      if (!jwtSecret) {
+        throw new Error('JWT_SECRET is not set in environment variables');
+      }
       return this.jwtService.verify(token, {
-        secret: this.configService.get<string>('JWT_SECRET', 'your-secret-key'),
+        secret: jwtSecret,
       }) as JwtPayload;
     } catch (error) {
       return null;
@@ -47,10 +58,17 @@ export class TokenService {
 
   verifyRefreshToken(token: string): { sub: string } | null {
     try {
+      const jwtRefreshSecret =
+        this.configService.get<string>('JWT_REFRESH_SECRET');
+      if (!jwtRefreshSecret) {
+        throw new Error(
+          'JWT_REFRESH_SECRET is not set in environment variables',
+        );
+      }
       return this.jwtService.verify(token, {
         secret: this.configService.get<string>(
           'JWT_REFRESH_SECRET',
-          'your-refresh-secret',
+          jwtRefreshSecret,
         ),
       }) as { sub: string };
     } catch (error) {
