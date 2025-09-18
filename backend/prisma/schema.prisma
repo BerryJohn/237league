@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// export type SteamData = {
+//   provider: string;
+//   _json: userData;
+//   id: string;
+//   displayName: string;
+//   photos: Photo[];
+// };
+
+// export type userData = {
+//   steamid: string;
+//   communityvisibilitystate: number;
+//   profilestate: number;
+//   personaname: string;
+//   commentpermission: number;
+//   profileurl: string;
+//   avatar: string;
+//   avatarmedium: string;
+//   avatarfull: string;
+//   avatarhash: string;
+//   lastlogoff: number;
+//   personastate: number;
+//   realname: string;
+//   primaryclanid: string;
+//   timecreated: number;
+//   personastateflags: number;
+//   loccountrycode: string;
+// };
+
+// export type Photo = {
+//   value: string;
+// };
+
+
+model User {
+  id                        String  @id @default(uuid())
+  steamId                   String  @unique
+  displayName               String  @db.VarChar(100)
+  avatar                    String  @db.VarChar(255)
+  communityVisibilityState  Int
+  profileState              Int
+  personaName               String  @db.VarChar(100)
+  commentPermission         Int
+  profileUrl                String  @db.VarChar(255)
+  avatarMedium              String  @db.VarChar(255)
+  avatarFull                String  @db.VarChar(255)
+  avatarHash                String  @db.VarChar(100)
+  lastLogoff                Int
+  personaState              Int
+  realName                  String? @db.VarChar(100)
+  primaryClanId             String? @db.VarChar(100)
+  timeCreated               Int
+  personaStateFlags         Int
+  locCountryCode            String? @db.VarChar(10)
+}
