@@ -6,14 +6,14 @@ import { Avatar } from '@heroui/avatar';
 import { Link } from '@heroui/link';
 import { Divider } from '@heroui/divider';
 import { createSteamAvatarURL } from '@/utils/helpers';
-import { userDataType } from './user-profile';
+import { userDataType } from '@/types/user';
 
 interface UserProfileHeaderProps {
   profile: userDataType;
   isOwnProfile: boolean;
 }
 
-const formatJoinDate = (date: Date) => {
+const formatJoinDate = (date: string) => {
   return new Date(date).toLocaleDateString();
 };
 

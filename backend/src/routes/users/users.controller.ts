@@ -21,10 +21,16 @@ export class UsersController {
     const userId = user?.sub;
 
     if (!userId) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User ID not found');
     }
 
-    return this.usersService.findBySteamId(userId);
+    const me = await this.usersService.findBySteamId(userId);
+
+    if (!me) {
+      throw new NotFoundException('User not found in database');
+    }
+
+    return me;
   }
 
   @Get(':steamId')

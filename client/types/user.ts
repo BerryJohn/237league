@@ -6,5 +6,5 @@ export type userDataType = {
   personaName: string;
   steamProfileUrl: string;
   avatarHash: string;
-  createdAt: Date;
+  createdAt: string;
 };

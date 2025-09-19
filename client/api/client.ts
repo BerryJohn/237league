@@ -1,11 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-// Base API configuration
-const API_BASE_URL = 'http://localhost:3001';
-
 // Create axios instance with default configuration
 const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_ADDRESS,
   withCredentials: true, // This ensures cookies (including bearer tokens) are sent
   headers: {
     'Content-Type': 'application/json',

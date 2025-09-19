@@ -40,10 +40,10 @@ export const UserDropdown = ({ user, onLogout }: UserDropdownProps) => {
             key="profile"
             className="h-14 gap-2"
             textValue="Profile"
-            onPress={() => router.push(`/user/${user.id || user.steamId}`)}
+            onPress={() => router.push(`/user`)}
           >
             <User
-              name={'Imie Nazwisko'}
+              name={user.displayName}
               description={`@${user.displayName}`}
               classNames={{
                 name: 'text-default-600 truncate max-w-[120px]',
