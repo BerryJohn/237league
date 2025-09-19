@@ -1,21 +1,18 @@
 export interface User {
-  id: string; // Steam ID
+  id?: string;
+  steamId: string;
   displayName: string;
-  username: string;
-  profileUrl: string;
-  avatar: {
-    small: string;
-    medium: string;
-    large: string;
-  };
-  createdAt?: Date;
-  updatedAt?: Date;
+  avatar: string;
+  personaName: string;
+  steamProfileUrl: string;
+  avatarHash: string;
+  createdAt: Date;
 }
 
 export interface JwtPayload {
   sub: string; // Steam ID
-  username: string;
   displayName: string;
+  personaName: string;
   iat?: number;
   exp?: number;
 }
