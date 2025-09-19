@@ -19,4 +19,4 @@ const config = {
   plugins: [heroui()],
 };
 
-export default config;
+module.exports = config;
