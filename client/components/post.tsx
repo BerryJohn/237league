@@ -59,7 +59,7 @@ const Post = ({ imgUrl, title, date, author, id }: PostProps) => {
         isZoomed
         alt="Post image"
         className="z-0 w-full h-full object-cover"
-        src={imgUrl || './../brand/logo.png'}
+        src={imgUrl || '/brand/logo.png'}
       />
       {title && (
         <CardFooter className="absolute bottom-0">

@@ -9,7 +9,7 @@ export const Footer = () => {
   return (
     <footer className="w-full flex items-center justify-center flex-col pt-8">
       <div>
-        <Image src={'./brand/logo.png'} alt="237League Logo" width={90} />
+        <Image src={'/brand/logo.png'} alt="237League Logo" width={90} />
       </div>
       <div className="w-full flex flex-row justify-between px-48 pb-16">
         <div className="flex-1 flex flex-col items-start pr-24 gap-4">
