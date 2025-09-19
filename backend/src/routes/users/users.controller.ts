@@ -7,7 +7,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from 'src/dtos/user.dto';
 import { type JwtPayload } from 'src/interfaces/user.interface';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
@@ -19,7 +18,6 @@ export class UsersController {
   @Get('/me')
   @UseGuards(JwtAuthGuard)
   async findMe(@User() user: JwtPayload) {
-    console.log('Authenticated user:', user);
     const userId = user?.sub;
 
     if (!userId) {
