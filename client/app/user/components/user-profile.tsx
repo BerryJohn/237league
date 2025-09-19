@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { UserProfileHeader } from '@/components/user/user-profile-header';
+import { UserProfileHeader } from './user-profile-header';
 import { useApi, getCurrentUser, getUserBySteamId } from '@/api';
 import { userDataType } from '@/types/user';
 

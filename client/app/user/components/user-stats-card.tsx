@@ -2,7 +2,7 @@
 
 import { Card, CardHeader, CardBody } from '@heroui/card';
 import { Chip } from '@heroui/chip';
-import { UserStats, Achievement } from '@/types';
+import { UserStats } from '@/types';
 
 interface UserStatsCardProps {
   stats: UserStats;

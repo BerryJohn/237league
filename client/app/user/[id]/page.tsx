@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { UserProfile } from '@/components/user/user-profile';
+import { UserProfile } from './../components/user-profile';
 import { useAuth } from '@/contexts/auth-context';
 import { useMemo } from 'react';
 

@@ -58,7 +58,7 @@ export const UserDropdown = ({ user, onLogout }: UserDropdownProps) => {
           <DropdownItem
             key="settings"
             startContent={<SettingsIcon size={16} />}
-            onPress={() => router.push('/user')}
+            onPress={() => router.push('/settings')}
             className="text-sm"
           >
             <span className="truncate">Ustawienia</span>
