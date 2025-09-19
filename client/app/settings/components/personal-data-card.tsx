@@ -7,19 +7,21 @@ import { Alert } from '@heroui/alert';
 import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
 import { countries } from '@/utils/countries';
 import Image from 'next/image';
-
-interface PersonalDataCardProps {
-  onSave?: (data: PersonalData) => void;
-}
+import { userApi } from '@/api';
+import { addToast } from '@heroui/toast';
+import { useAuth } from '@/contexts/auth-context';
 
 interface PersonalData {
-  firstName: string;
-  lastName: string;
+  name: string;
+  surname: string;
   country: string;
   preferredStartNumber: string;
+  email: string;
 }
 
-export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
+export function PersonalDataCard() {
+  const { user } = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -28,20 +30,28 @@ export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
   } = useForm<PersonalData>({
     mode: 'onChange', // Validate on change
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      country: '',
-      preferredStartNumber: '',
+      name: user?.name || '',
+      surname: user?.surname || '',
+      country: user?.country || 'PL',
+      preferredStartNumber: user?.preferredStartNumber || '',
+      email: user?.email || '',
     },
   });
 
-  // Trigger validation on component mount to show errors immediately
   useEffect(() => {
     trigger();
   }, [trigger]);
 
-  const onSubmit = (data: PersonalData) => {
-    onSave?.(data);
+  const onSubmit = async (data: PersonalData) => {
+    try {
+      await userApi.updateUser(data);
+      addToast({ title: 'Dane zostały zaktualizowane', color: 'success' });
+    } catch (e) {
+      addToast({
+        title: 'Wystąpił błąd podczas aktualizacji danych',
+        color: 'danger',
+      });
+    }
   };
 
   return (
@@ -60,7 +70,7 @@ export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Controller
-                name="firstName"
+                name="name"
                 control={control}
                 rules={{ required: 'To pole jest wymagane' }}
                 render={({ field }) => (
@@ -68,15 +78,15 @@ export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
                     {...field}
                     label="Imię"
                     size="sm"
-                    isInvalid={!!errors.firstName}
-                    errorMessage={errors.firstName?.message}
+                    isInvalid={!!errors.name}
+                    errorMessage={errors.name?.message}
                   />
                 )}
               />
             </div>
             <div>
               <Controller
-                name="lastName"
+                name="surname"
                 control={control}
                 rules={{ required: 'To pole jest wymagane' }}
                 render={({ field }) => (
@@ -84,8 +94,8 @@ export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
                     {...field}
                     label="Nazwisko"
                     size="sm"
-                    isInvalid={!!errors.lastName}
-                    errorMessage={errors.lastName?.message}
+                    isInvalid={!!errors.surname}
+                    errorMessage={errors.surname?.message}
                   />
                 )}
               />
@@ -124,6 +134,23 @@ export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
                 )}
               />
             </div>
+
+            <div>
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    label="Email"
+                    size="sm"
+                    isInvalid={!!errors.email}
+                    errorMessage={errors.email?.message}
+                  />
+                )}
+              />
+            </div>
+
             <div>
               <Controller
                 name="preferredStartNumber"

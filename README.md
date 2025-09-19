@@ -8,6 +8,7 @@ This repository contains the codebase for the 237league project, including both 
 
 - [Project Structure](#project-structure)
 - [Backend Setup](#backend-setup)
+- [Database & Prisma Setup](#database--prisma-setup)
 - [Frontend Setup](#frontend-setup)
 - [Environment Variables](#environment-variables)
 - [Development Notes](#development-notes)
@@ -49,6 +50,83 @@ This repository contains the codebase for the 237league project, including both 
 
 ---
 
+## Database & Prisma Setup
+
+This project uses PostgreSQL with Prisma as the ORM. The database schema is defined in `backend/prisma/schema.prisma`.
+
+### 1. Start the Database
+
+Using Docker (recommended):
+```bash
+cd backend
+docker-compose up -d
+```
+
+This will start a PostgreSQL database on port 5432 with the following credentials:
+- **User:** `user`
+- **Password:** `setMePlease`
+- **Database:** `league_db`
+
+### 2. Environment Variables
+
+Add the database connection string to your `backend/.env` file:
+```env
+DATABASE_URL="postgresql://user:setMePlease@localhost:5432/league_db"
+```
+
+### 3. Prisma Commands
+
+Install Prisma CLI globally (optional but recommended):
+```bash
+npm install -g prisma
+```
+
+**Apply migrations to your database:**
+```bash
+cd backend
+npx prisma migrate dev
+```
+
+**Generate Prisma Client:**
+```bash
+npx prisma generate
+```
+
+**Reset database (⚠️ development only):**
+```bash
+npx prisma migrate reset
+```
+
+**View your data with Prisma Studio:**
+```bash
+npx prisma studio
+```
+
+### 4. Database Schema Management
+
+- **Schema file:** `backend/prisma/schema.prisma`
+- **Migrations:** `backend/prisma/migrations/`
+- **Generated client:** `backend/generated/prisma/`
+
+### 5. Common Workflows
+
+**After making schema changes:**
+1. Update `schema.prisma`
+2. Run `npx prisma migrate dev --name describe_your_changes`
+3. The Prisma client will be automatically regenerated
+
+**Setting up a fresh database:**
+1. Ensure Docker container is running
+2. Run `npx prisma migrate dev` to apply all migrations
+3. Optionally, run `npx prisma db seed` if you have seed data
+
+**Checking migration status:**
+```bash
+npx prisma migrate status
+```
+
+---
+
 ## Frontend Setup (Next.js)
 
 1. **Install dependencies:**
@@ -72,11 +150,21 @@ This repository contains the codebase for the 237league project, including both 
 Create a `.env` file in the `backend/` directory. Example:
 
 ```env
+# Database
+DATABASE_URL="postgresql://user:setMePlease@localhost:5432/league_db"
+
+# Steam API
 STEAM_API_KEY=your_steam_api_key
+
+# Server Configuration
 PORT=3001
 CLIENT_URL=http://localhost:3000
+
+# JWT Authentication
 JWT_SECRET=your_jwt_secret
 JWT_REFRESH_SECRET=your_jwt_refresh_secret
+
+# Environment
 NODE_ENV=development
 ```
 
@@ -91,8 +179,10 @@ BACKEND_PORT = 3001
 ## Development Notes
 
 - **Backend:** Built with [NestJS](https://nestjs.com/). Uses JWT authentication and Steam login. API docs available via Swagger at `/api/docs` when running.
+- **Database:** PostgreSQL with [Prisma ORM](https://prisma.io/) for type-safe database access and migrations.
 - **Frontend:** Built with [Next.js 14](https://nextjs.org/) and [HeroUI](https://heroui.com/). Uses Tailwind CSS for styling.
 - **Node.js version:** Use Node.js 18+ for best compatibility.
+- **Docker:** Database runs in Docker container for consistent development environment.
 - **Monorepo:** Backend and frontend are developed separately. Start each in its own terminal.
 - **Contributions:** PRs and issues are welcome!
 

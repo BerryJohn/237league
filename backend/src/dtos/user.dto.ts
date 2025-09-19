@@ -28,6 +28,32 @@ export class CreateUserDto {
 
   @IsDate()
   createdAt: Date;
+
+  @IsOptional()
+  @IsString()
+  @Length(2, 2)
+  country: string;
+}
+
+export class UpdateUserDto {
+  @IsString()
+  @Length(2, 100)
+  name: string;
+
+  @IsString()
+  @Length(2, 100)
+  surname: string;
+
+  @IsString()
+  @Length(2, 2)
+  country: string;
+
+  @IsString()
+  preferredStartNumber: string;
+
+  @IsOptional()
+  @IsString()
+  email: string;
 }
 
 // {

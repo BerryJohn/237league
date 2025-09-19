@@ -1,6 +1,6 @@
 export { apiClient } from './client';
 
-export { userApi, getCurrentUser, getUserBySteamId } from './users';
+export { userApi } from './users';
 
 export { useApi, useApiMutation } from './hooks';
 

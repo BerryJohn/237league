@@ -7,4 +7,10 @@ export type userDataType = {
   steamProfileUrl: string;
   avatarHash: string;
   createdAt: string;
+
+  country?: string;
+  name?: string;
+  surname?: string;
+  email?: string;
+  preferredStartNumber?: string;
 };

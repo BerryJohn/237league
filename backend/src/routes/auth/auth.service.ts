@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TokenService } from './../../services/token.service';
 import { User } from './../../interfaces/user.interface';
 import { UsersService } from './../users/users.service';
+import { SteamUserData } from 'src/interfaces/steam-user.interface';
 
 @Injectable()
 export class AuthService {
@@ -10,9 +11,14 @@ export class AuthService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findOrCreateUser(steamProfile: any) {
-    // Use the users service to find or create user in database
-    return this.usersService.findOrCreateBySteamProfile(steamProfile);
+  async findUser(steamProfile: SteamUserData) {
+    // Use the users service to find user in database
+    return this.usersService.findBySteamId(steamProfile.id);
+  }
+
+  async createUser(steamProfile: SteamUserData) {
+    // Use the users service to create a new user
+    return this.usersService.createUser(steamProfile);
   }
 
   async loginUser(

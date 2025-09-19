@@ -15,12 +15,17 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
-  steamId         String   @unique
-  displayName     String   @db.VarChar(100)
-  avatar          String   @db.VarChar(255)
-  personaName     String   @db.VarChar(100)
-  steamProfileUrl String   @db.VarChar(255)
-  avatarHash      String   @db.VarChar(100)
-  createdAt       DateTime @default(now())
+  id                    String   @id @default(uuid())
+  steamId               String   @unique
+  displayName           String   @db.VarChar(100)
+  avatar                String   @db.VarChar(255)
+  personaName           String   @db.VarChar(100)
+  steamProfileUrl       String   @db.VarChar(255)
+  avatarHash            String   @db.VarChar(100)
+  createdAt             DateTime @default(now())
+  country               String?  @db.Char(2)
+  name                  String?  @db.VarChar(100)
+  surname               String?  @db.VarChar(100)
+  email                 String?  @unique @db.VarChar(100)
+  preferredStartNumber  String? @db.VarChar(10)
 }

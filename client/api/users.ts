@@ -21,8 +21,15 @@ export const userApi = {
   ): Promise<AxiosResponse<userDataType>> => {
     return await apiClient.get(`/users/${steamId}`);
   },
-};
 
-// Export individual functions for convenience
-export const getCurrentUser = userApi.getCurrentUser;
-export const getUserBySteamId = userApi.getUserBySteamId;
+  /**
+   * Update user information
+   * PUT /users
+   * Requires authentication (bearer token from cookies)
+   */
+  updateUser: async (
+    updateData: Partial<userDataType>
+  ): Promise<AxiosResponse<userDataType>> => {
+    return await apiClient.put('/users', updateData);
+  },
+};

@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { UserProfileHeader } from './user-profile-header';
-import { useApi, getCurrentUser, getUserBySteamId } from '@/api';
+import { useApi, userApi } from '@/api';
 import { userDataType } from '@/types/user';
 
 interface UserProfileProps {
@@ -18,7 +18,9 @@ export function UserProfile({ steamId, isOwnProfile }: UserProfileProps) {
 
   // Choose the appropriate API function based on whether steamId is provided
   const apiFn = useMemo(() => {
-    return steamId ? () => getUserBySteamId(steamId) : getCurrentUser;
+    return steamId
+      ? () => userApi.getUserBySteamId(steamId)
+      : userApi.getCurrentUser;
   }, [steamId]);
 
   const {

@@ -7,6 +7,12 @@ export interface User {
   steamProfileUrl: string;
   avatarHash: string;
   createdAt: Date;
+  email?: string | null;
+
+  name?: string | null;
+  surname?: string | null;
+  country?: string | null;
+  preferredStartNumber?: string | null;
 }
 
 export interface JwtPayload {

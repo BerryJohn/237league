@@ -30,8 +30,19 @@ export class AuthController {
   @UseGuards(AuthGuard('steam'))
   async steamLoginCallback(@Req() req: any, @Res() res: Response) {
     try {
+      let isNewUser = false;
       // Find or create user from Steam profile
-      const user = await this.authService.findOrCreateUser(req.user);
+      let user = await this.authService.findUser(req.user);
+
+      if (!user) {
+        // If user not found, create a new user
+        const newUser = await this.authService.createUser(req.user);
+        if (!newUser) {
+          throw new Error('User creation failed');
+        }
+        user = newUser;
+        isNewUser = true;
+      }
 
       // Generate JWT tokens
       const { accessToken, refreshToken } =
@@ -56,6 +67,12 @@ export class AuthController {
       if (!clientUrl) {
         throw new Error('CLIENT_URL is not set in environment variables');
       }
+
+      if (isNewUser) {
+        // Redirect to client with new user indicator
+        return res.redirect(`${clientUrl}/settings/?auth=success`);
+      }
+
       // Redirect to client with success indicator
       res.redirect(`${clientUrl}/?auth=success`);
     } catch (error) {
@@ -65,6 +82,7 @@ export class AuthController {
       }
 
       console.error('Steam login error:', error);
+
       res.redirect(`${clientUrl}/?auth=error`);
     }
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'src/dtos/user.dto';
+import { CreateUserDto, UpdateUserDto } from 'src/dtos/user.dto';
 import { SteamUserData } from 'src/interfaces/steam-user.interface';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -19,14 +19,7 @@ export class UsersService {
     });
   }
 
-  async findOrCreateBySteamProfile(steamProfile: SteamUserData) {
-    const steamId = steamProfile.id;
-
-    const existingUser = await this.findBySteamId(steamId);
-    if (existingUser) {
-      return existingUser;
-    }
-
+  async createUser(steamProfile: SteamUserData) {
     const userData: CreateUserDto = {
       steamId: steamProfile.id,
       displayName: steamProfile.displayName,
@@ -35,8 +28,16 @@ export class UsersService {
       steamProfileUrl: steamProfile._json?.profileurl || '',
       avatarHash: steamProfile._json?.avatarhash || '',
       createdAt: new Date(),
+      country: steamProfile._json?.loccountrycode || 'PL',
     };
 
     return this.create(userData);
+  }
+
+  async updateUser(steamId: string, updateData: Partial<UpdateUserDto>) {
+    return this.prisma.user.update({
+      where: { steamId },
+      data: updateData,
+    });
   }
 }
