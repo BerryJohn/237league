@@ -3,7 +3,10 @@ import { Input } from '@heroui/input';
 import { Button } from '@heroui/button';
 import { useForm, Controller } from 'react-hook-form';
 import { useEffect } from 'react';
-// import {Alert} from "@heroui/alert";
+import { Alert } from '@heroui/alert';
+import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
+import { countries } from '@/utils/countries';
+import Image from 'next/image';
 
 interface PersonalDataCardProps {
   onSave?: (data: PersonalData) => void;
@@ -47,6 +50,12 @@ export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
         <h2 className="text-xl font-semibold">Dane personalne</h2>
       </CardHeader>
       <CardBody className="space-y-4">
+        <Alert variant="faded" className="text-sm" color="secondary">
+          Dane personalne są wykorzystywane do identyfikacji zawodników podczas
+          zawodów. Bez uzupełnienia tych danych, nie będziesz mógł wziąć w nich
+          udziału. Dane nie muszą być prawdziwe, ale powinny być realistyczne.
+        </Alert>
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -87,20 +96,33 @@ export function PersonalDataCard({ onSave }: PersonalDataCardProps) {
                 control={control}
                 rules={{ required: 'To pole jest wymagane' }}
                 render={({ field }) => (
-                  <Input
-                    {...field}
-                    label="Kraj pochodzenia"
+                  <Autocomplete
+                    label="Pochodzenie"
                     size="sm"
                     isInvalid={!!errors.country}
                     errorMessage={errors.country?.message}
-                  />
+                    selectedKey={field.value}
+                    onSelectionChange={(key) => field.onChange(key)}
+                  >
+                    {countries.map((country) => (
+                      <AutocompleteItem
+                        key={country.code}
+                        startContent={
+                          <Image
+                            alt={country.name}
+                            className="w-6 h-6"
+                            src={country.image}
+                            width={24}
+                            height={24}
+                          />
+                        }
+                      >
+                        {country.name}
+                      </AutocompleteItem>
+                    ))}
+                  </Autocomplete>
                 )}
               />
-              {/* <Autocomplete size="sm" value={'Polska'}>. // i got problems with autocomplete, it bugs build
-                <AutocompleteItem key="polska">Polska</AutocompleteItem>
-                <AutocompleteItem key="niemiecka">Niemiecka</AutocompleteItem>
-                <AutocompleteItem key="francuska">Francuska</AutocompleteItem>
-              </Autocomplete> */}
             </div>
             <div>
               <Controller
