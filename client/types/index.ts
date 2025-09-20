@@ -327,6 +327,28 @@ export interface SeasonFilters {
   category?: string;
 }
 
+// League-related types
+export interface League {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: Date;
+  game: string;
+  seasons?: Season[];
+}
+
+export interface CreateLeagueRequest {
+  name: string;
+  description?: string;
+  game: string;
+}
+
+export interface UpdateLeagueRequest {
+  name?: string;
+  description?: string;
+  game?: string;
+}
+
 // News-related types
 export interface NewsArticle {
   id: string;

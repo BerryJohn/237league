@@ -15,17 +15,89 @@ datasource db {
 }
 
 model User {
-  id                    String   @id @default(uuid())
-  steamId               String   @unique
-  displayName           String   @db.VarChar(100)
-  avatar                String   @db.VarChar(255)
-  personaName           String   @db.VarChar(100)
-  steamProfileUrl       String   @db.VarChar(255)
-  avatarHash            String   @db.VarChar(100)
-  createdAt             DateTime @default(now())
-  country               String?  @db.Char(2)
-  name                  String?  @db.VarChar(100)
-  surname               String?  @db.VarChar(100)
-  email                 String?  @unique @db.VarChar(100)
-  preferredStartNumber  String? @db.VarChar(10)
+  id                   String   @id @default(uuid())
+  steamId              String   @unique
+  displayName          String   @db.VarChar(100)
+  avatar               String   @db.VarChar(255)
+  personaName          String   @db.VarChar(100)
+  steamProfileUrl      String   @db.VarChar(255)
+  avatarHash           String   @db.VarChar(100)
+  createdAt            DateTime @default(now())
+  // Extended profile fields - completed by user
+  country              String?  @db.Char(2)
+  name                 String?  @db.VarChar(100)
+  surname              String?  @db.VarChar(100)
+  email                String?  @unique @db.VarChar(100)
+  preferredStartNumber String?  @db.VarChar(10)
+  //flags
+  isAdmin              Boolean  @default(false)
+  // statss
+  eloRating            Int      @default(2000)
+  // Relations
+  raceResults RaceResult[]
+}
+
+// League is geneal entity representing a racing league
+model League {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  game        String
+  seasons     Season[]
+}
+
+// Season represents a specific season within a league
+model Season {
+  id         String    @id @default(cuid())
+  name       String
+  isFinished Boolean   @default(false)
+  startDate  DateTime?
+  endDate    DateTime?
+  createdAt  DateTime  @default(now())
+
+  leagueId String
+  league   League @relation(fields: [leagueId], references: [id])
+
+  races Race[]
+
+  @@unique([leagueId, name])
+}
+
+model Race {
+  id          String   @id @default(cuid())
+  name        String
+  trackName   String
+  description String?
+  raceDate    DateTime
+  createdAt   DateTime @default(now())
+
+  // Relation: A race MAY belong to a season, but doesn't have to.
+  seasonId String?
+  season   Season? @relation(fields: [seasonId], references: [id])
+
+  results RaceResult[]
+}
+
+model RaceResult {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  raceId String
+  race   Race   @relation(fields: [raceId], references: [id])
+
+  position        Int? 
+  status          String? 
+  points          Int     @default(0)
+  bestLapTimeMs   Int? 
+  totalRaceTimeMs Int? 
+  isDisqualified  Boolean @default(false)
+  notes           String? 
+
+  createdAt DateTime @default(now())
+
+  // Unique key to ensure a user cannot have two results in the same race
+  @@unique([userId, raceId])
 }

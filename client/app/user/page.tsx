@@ -1,4 +1,4 @@
-import UserProtectedRoute from '@/components/user-protected-route';
+import UserProtectedRoute from '@/components/routes/user-protected-route';
 import { UserProfile } from './components/user-profile';
 
 export default function UserPage() {

@@ -7,6 +7,7 @@ import { Link } from '@heroui/link';
 import { Divider } from '@heroui/divider';
 import { createSteamAvatarURL } from '@/utils/helpers';
 import { userDataType } from '@/types/user';
+import { user } from '@heroui/theme';
 
 interface UserProfileHeaderProps {
   profile: userDataType;
@@ -39,14 +40,17 @@ export function UserProfileHeader({
                 <h1 className="text-2xl font-bold text-foreground">
                   {profile.displayName}
                 </h1>
-                <Chip
-                  color="success"
-                  variant="flat"
-                  size="sm"
-                  className="text-xs"
-                >
-                  Racing League Member
-                </Chip>
+
+                {profile.isAdmin && (
+                  <Chip
+                    color="danger"
+                    variant="flat"
+                    size="sm"
+                    className="text-xs"
+                  >
+                    Administrator
+                  </Chip>
+                )}
               </div>
 
               {profile.personaName !== profile.displayName && (

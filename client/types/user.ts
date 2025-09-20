@@ -13,4 +13,6 @@ export type userDataType = {
   surname?: string;
   email?: string;
   preferredStartNumber?: string;
+
+  isAdmin?: boolean;
 };

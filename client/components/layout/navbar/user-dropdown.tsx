@@ -11,9 +11,10 @@ import {
 import { User } from '@heroui/user';
 import { useRouter } from 'next/navigation';
 
-import { SettingsIcon, LogoutIcon } from '@/components/icons';
+import { SettingsIcon, LogoutIcon, AdminIcon } from '@/components/icons';
 import { createSteamAvatarURL } from '@/utils/helpers';
 import { userDataType } from '@/types/user';
+import { useAuth } from '@/contexts/auth-context';
 
 interface UserDropdownProps {
   user: userDataType;
@@ -63,7 +64,18 @@ export const UserDropdown = ({ user, onLogout }: UserDropdownProps) => {
           >
             <span className="truncate">Ustawienia</span>
           </DropdownItem>
+          {user.isAdmin ? (
+            <DropdownItem
+              key="admin"
+              onPress={() => router.push('/admin')}
+              startContent={<AdminIcon className="size-4" />}
+              className="text-sm"
+            >
+              <span>Panel administracyjny</span>
+            </DropdownItem>
+          ) : null}
         </DropdownSection>
+
         <DropdownSection aria-label="Danger zone">
           <DropdownItem
             key="logout"

@@ -1,0 +1,185 @@
+'use client';
+
+import React, { useState, useMemo } from 'react';
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@heroui/table';
+import { Chip } from '@heroui/chip';
+import { Button } from '@heroui/button';
+import { Popover, PopoverTrigger, PopoverContent } from '@heroui/popover';
+import { Input } from '@heroui/input';
+import { EmptyState } from './empty-state';
+import { LeagueModal } from './leagues-modal';
+import { League } from '@/types';
+
+const mockLeagues: League[] = [];
+
+const columns = [
+  { name: 'LIGA', uid: 'name' },
+  { name: 'GRA', uid: 'game' },
+  { name: 'SEZONY', uid: 'seasons' },
+
+  { name: 'DATA UTWORZENIA', uid: 'createdAt' },
+  { name: 'AKCJE', uid: '' },
+];
+
+const renderCell = (
+  league: League,
+  columnKey: string,
+  onEdit: (league: League) => void
+) => {
+  switch (columnKey) {
+    case 'name':
+      return (
+        <div className="flex flex-col">
+          <p className="text-bold text-small">{league.name}</p>
+          <p className="text-bold text-tiny text-default-400">
+            {league.description}
+          </p>
+        </div>
+      );
+    case 'game':
+      return <span>{league.game}</span>;
+    case 'seasons':
+      const seasonsCount = league.seasons?.length || 0;
+      return (
+        <Popover placement="bottom" showArrow>
+          <PopoverTrigger>
+            <Chip
+              variant="bordered"
+              color="primary"
+              title={seasonsCount.toString()}
+              className="cursor-pointer"
+            >
+              {seasonsCount}
+            </Chip>
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="px-1 py-2">
+              {seasonsCount === 0 ? (
+                <div className="text-tiny text-default-400">
+                  Brak stworzonych sezonów
+                </div>
+              ) : (
+                league.seasons?.map((season) => (
+                  <div key={season.id} className="text-tiny">
+                    {season.name}
+                  </div>
+                ))
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
+      );
+    case 'createdAt':
+      return (
+        <div className="flex flex-col">
+          <p className="text-bold text-tiny text-default-400">
+            {league.createdAt.toLocaleDateString()}
+          </p>
+        </div>
+      );
+    case 'actions':
+      return (
+        <Button size="sm" onPress={() => onEdit(league)}>
+          Edit
+        </Button>
+      );
+    default:
+      return <span>-</span>;
+  }
+};
+
+export const LeaguesTable = () => {
+  const [searchValue, setSearchValue] = useState('');
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    league?: League;
+  }>({ isOpen: false });
+
+  const handleCreateLeague = () => {
+    setModalState({ isOpen: true });
+  };
+
+  const handleEditLeague = (league: League) => {
+    setModalState({ isOpen: true, league });
+  };
+
+  const filteredLeagues = useMemo(() => {
+    if (!searchValue) return mockLeagues;
+
+    const searchTerm = searchValue.toLowerCase();
+
+    return mockLeagues.filter((league) => {
+      const matchesName = league.name.toLowerCase().includes(searchTerm);
+      const matchesDescription =
+        league.description?.toLowerCase().includes(searchTerm) || false;
+      const matchesGame = league.game.toLowerCase().includes(searchTerm);
+
+      return matchesName || matchesDescription || matchesGame;
+    });
+  }, [searchValue]);
+
+  return (
+    <div className="w-full">
+      {mockLeagues.length > 0 ? (
+        <div className="flex items-center justify-between mb-4">
+          <Input
+            placeholder="Szukaj ligi..."
+            className="w-64"
+            value={searchValue}
+            onValueChange={setSearchValue}
+            isClearable
+            onClear={() => setSearchValue('')}
+          />
+          <Button color="primary" onPress={handleCreateLeague}>
+            Dodaj ligę
+          </Button>
+        </div>
+      ) : null}
+      {filteredLeagues.length === 0 ? (
+        <EmptyState searchValue={searchValue} onAddClick={handleCreateLeague} />
+      ) : (
+        <Table
+          aria-label="Leagues table"
+          className="max-h-[70vh] overflow-auto"
+          isHeaderSticky
+          isStriped
+        >
+          <TableHeader columns={columns}>
+            {(column) => (
+              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={filteredLeagues}>
+            {(item) => (
+              <TableRow key={item.id}>
+                {(columnKey) => (
+                  <TableCell>
+                    {renderCell(item, columnKey as string, handleEditLeague)}
+                  </TableCell>
+                )}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+      <LeagueModal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ isOpen: false })}
+        onSubmit={async (data) => {
+          // TODO: Implement actual submit logic
+          console.log('Submit data:', data);
+        }}
+        league={modalState.league}
+      />
+    </div>
+  );
+};
+
+export default LeaguesTable;

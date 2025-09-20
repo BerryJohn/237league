@@ -8,9 +8,7 @@ interface AdminProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export default function AdminProtectedRoute({
-  children,
-}: AdminProtectedRouteProps) {
+export const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
   const { user, isAuthenticated, isLoading } = useAuth();
 
   // Show loading state while checking authentication
@@ -27,13 +25,12 @@ export default function AdminProtectedRoute({
     notFound();
   }
 
-  // Check admin privileges (steamId === "2137" for now)
-  const isAdmin = user.steamId === '2137';
-
-  if (!isAdmin) {
+  if (!user.isAdmin) {
     notFound();
   }
 
   // User is authenticated and has admin privileges, render the protected content
   return <>{children}</>;
-}
+};
+
+export default AdminProtectedRoute;

@@ -10,9 +10,7 @@ interface UserProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export default function UserProtectedRoute({
-  children,
-}: UserProtectedRouteProps) {
+export const UserProtectedRoute = ({ children }: UserProtectedRouteProps) => {
   const { user, isAuthenticated, isLoading, login } = useAuth();
 
   // Show loading state while checking authentication
@@ -72,4 +70,6 @@ export default function UserProtectedRoute({
 
   // User is authenticated, render the protected content
   return <>{children}</>;
-}
+};
+
+export default UserProtectedRoute;
