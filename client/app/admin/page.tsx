@@ -1,11 +1,10 @@
-'use client';
-
 import { Card, CardBody, CardHeader } from '@heroui/card';
 import { Button } from '@heroui/button';
 import { Chip } from '@heroui/chip';
 import NextLink from 'next/link';
 
 import { title, subtitle, typography } from '@/components/primitives';
+import AdminProtectedRoute from '@/components/admin-protected-route';
 
 // Custom admin icons
 const UsersIcon = ({ className }: { className?: string }) => (
@@ -163,184 +162,191 @@ const adminMenuItems = [
 
 export default function AdminPanel() {
   return (
-    <section className="flex flex-col items-center justify-center gap-8 py-8 md:py-10">
-      <div className="inline-block max-w-4xl text-center justify-center">
-        <h1 className={title({ size: 'lg' })}>Panel Administratora</h1>
-        <p className={subtitle({ class: 'mt-4' })}>
-          Witaj w panelu zarządzania 237League. Stąd możesz zarządzać wszystkimi
-          aspektami ligi.
-        </p>
-      </div>
+    <AdminProtectedRoute>
+      <section className="flex flex-col items-center justify-center gap-8 py-8 md:py-10">
+        <div className="inline-block max-w-4xl text-center justify-center">
+          <h1 className={title({ size: 'lg' })}>Panel Administratora</h1>
+          <p className={subtitle({ class: 'mt-4' })}>
+            Witaj w panelu zarządzania 237League. Stąd możesz zarządzać
+            wszystkimi aspektami ligi.
+          </p>
+        </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl px-4">
-        <Card className="bg-gradient-to-br from-blue-500 to-blue-700">
-          <CardBody className="text-center text-white">
-            <p className="text-2xl font-bold">12</p>
-            <p className="text-sm opacity-90">Aktywni użytkownicy</p>
-          </CardBody>
-        </Card>
-        <Card className="bg-gradient-to-br from-green-500 to-green-700">
-          <CardBody className="text-center text-white">
-            <p className="text-2xl font-bold">3</p>
-            <p className="text-sm opacity-90">Nadchodzące wyścigi</p>
-          </CardBody>
-        </Card>
-        <Card className="bg-gradient-to-br from-purple-500 to-purple-700">
-          <CardBody className="text-center text-white">
-            <p className="text-2xl font-bold">1</p>
-            <p className="text-sm opacity-90">Aktywny sezon</p>
-          </CardBody>
-        </Card>
-        <Card className="bg-gradient-to-br from-orange-500 to-orange-700">
-          <CardBody className="text-center text-white">
-            <p className="text-2xl font-bold">47</p>
-            <p className="text-sm opacity-90">Łączne wyścigi</p>
-          </CardBody>
-        </Card>
-      </div>
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full max-w-6xl px-4">
+          <Card className="bg-gradient-to-br from-blue-500 to-blue-700">
+            <CardBody className="text-center text-white">
+              <p className="text-2xl font-bold">12</p>
+              <p className="text-sm opacity-90">Aktywni użytkownicy</p>
+            </CardBody>
+          </Card>
+          <Card className="bg-gradient-to-br from-green-500 to-green-700">
+            <CardBody className="text-center text-white">
+              <p className="text-2xl font-bold">3</p>
+              <p className="text-sm opacity-90">Nadchodzące wyścigi</p>
+            </CardBody>
+          </Card>
+          <Card className="bg-gradient-to-br from-purple-500 to-purple-700">
+            <CardBody className="text-center text-white">
+              <p className="text-2xl font-bold">1</p>
+              <p className="text-sm opacity-90">Aktywny sezon</p>
+            </CardBody>
+          </Card>
+          <Card className="bg-gradient-to-br from-orange-500 to-orange-700">
+            <CardBody className="text-center text-white">
+              <p className="text-2xl font-bold">47</p>
+              <p className="text-sm opacity-90">Łączne wyścigi</p>
+            </CardBody>
+          </Card>
+        </div>
 
-      {/* Admin Menu Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl px-4">
-        {adminMenuItems.map((item, index) => {
-          const IconComponent = item.icon;
+        {/* Admin Menu Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl px-4">
+          {adminMenuItems.map((item, index) => {
+            const IconComponent = item.icon;
 
-          // Define icon styling based on color
-          const getIconStyles = (color: string) => {
-            switch (color) {
-              case 'primary':
-                return {
-                  container: 'bg-blue-100 dark:bg-blue-900/20',
-                  icon: 'text-blue-600 dark:text-blue-400',
-                };
-              case 'secondary':
-                return {
-                  container: 'bg-purple-100 dark:bg-purple-900/20',
-                  icon: 'text-purple-600 dark:text-purple-400',
-                };
-              case 'success':
-                return {
-                  container: 'bg-green-100 dark:bg-green-900/20',
-                  icon: 'text-green-600 dark:text-green-400',
-                };
-              case 'warning':
-                return {
-                  container: 'bg-orange-100 dark:bg-orange-900/20',
-                  icon: 'text-orange-600 dark:text-orange-400',
-                };
-              case 'danger':
-                return {
-                  container: 'bg-red-100 dark:bg-red-900/20',
-                  icon: 'text-red-600 dark:text-red-400',
-                };
-              default:
-                return {
-                  container: 'bg-gray-100 dark:bg-gray-900/20',
-                  icon: 'text-gray-600 dark:text-gray-400',
-                };
-            }
-          };
+            // Define icon styling based on color
+            const getIconStyles = (color: string) => {
+              switch (color) {
+                case 'primary':
+                  return {
+                    container: 'bg-blue-100 dark:bg-blue-900/20',
+                    icon: 'text-blue-600 dark:text-blue-400',
+                  };
+                case 'secondary':
+                  return {
+                    container: 'bg-purple-100 dark:bg-purple-900/20',
+                    icon: 'text-purple-600 dark:text-purple-400',
+                  };
+                case 'success':
+                  return {
+                    container: 'bg-green-100 dark:bg-green-900/20',
+                    icon: 'text-green-600 dark:text-green-400',
+                  };
+                case 'warning':
+                  return {
+                    container: 'bg-orange-100 dark:bg-orange-900/20',
+                    icon: 'text-orange-600 dark:text-orange-400',
+                  };
+                case 'danger':
+                  return {
+                    container: 'bg-red-100 dark:bg-red-900/20',
+                    icon: 'text-red-600 dark:text-red-400',
+                  };
+                default:
+                  return {
+                    container: 'bg-gray-100 dark:bg-gray-900/20',
+                    icon: 'text-gray-600 dark:text-gray-400',
+                  };
+              }
+            };
 
-          const iconStyles = getIconStyles(item.color);
+            const iconStyles = getIconStyles(item.color);
 
-          return (
-            <Card
-              key={index}
-              className="hover:shadow-lg transition-shadow duration-300"
-              isPressable={item.available}
-            >
-              <CardHeader className="flex gap-3">
-                <div
-                  className={`flex-shrink-0 p-2 rounded-lg ${iconStyles.container}`}
-                >
-                  <IconComponent className={`h-6 w-6 ${iconStyles.icon}`} />
-                </div>
-                <div className="flex flex-col flex-grow">
-                  <div className="flex items-center gap-2">
-                    <p className="text-md font-semibold">{item.title}</p>
-                    {!item.available && (
-                      <Chip size="sm" color="default" variant="flat">
-                        Wkrótce
-                      </Chip>
+            return (
+              <Card
+                key={index}
+                className="hover:shadow-lg transition-shadow duration-300"
+                isPressable={item.available}
+              >
+                <CardHeader className="flex gap-3">
+                  <div
+                    className={`flex-shrink-0 p-2 rounded-lg ${iconStyles.container}`}
+                  >
+                    <IconComponent className={`h-6 w-6 ${iconStyles.icon}`} />
+                  </div>
+                  <div className="flex flex-col flex-grow">
+                    <div className="flex items-center gap-2">
+                      <p className="text-md font-semibold">{item.title}</p>
+                      {!item.available && (
+                        <Chip size="sm" color="default" variant="flat">
+                          Wkrótce
+                        </Chip>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardBody className="pt-0">
+                  <p className="text-small text-default-600 mb-4">
+                    {item.description}
+                  </p>
+                  <div className="flex justify-end">
+                    {item.available ? (
+                      <Button
+                        as={NextLink}
+                        href={item.href}
+                        color={item.color}
+                        variant="flat"
+                        size="sm"
+                      >
+                        Otwórz
+                      </Button>
+                    ) : (
+                      <Button
+                        color="default"
+                        variant="flat"
+                        size="sm"
+                        isDisabled
+                      >
+                        Niedostępne
+                      </Button>
                     )}
                   </div>
-                </div>
-              </CardHeader>
-              <CardBody className="pt-0">
-                <p className="text-small text-default-600 mb-4">
-                  {item.description}
-                </p>
-                <div className="flex justify-end">
-                  {item.available ? (
-                    <Button
-                      as={NextLink}
-                      href={item.href}
-                      color={item.color}
-                      variant="flat"
-                      size="sm"
-                    >
-                      Otwórz
-                    </Button>
-                  ) : (
-                    <Button color="default" variant="flat" size="sm" isDisabled>
-                      Niedostępne
-                    </Button>
-                  )}
-                </div>
-              </CardBody>
-            </Card>
-          );
-        })}
-      </div>
+                </CardBody>
+              </Card>
+            );
+          })}
+        </div>
 
-      {/* Recent Activity */}
-      <div className="w-full max-w-6xl px-4">
-        <Card>
-          <CardHeader>
-            <h3 className={typography({ size: 'lg', weight: 'semibold' })}>
-              Ostatnie aktywności
-            </h3>
-          </CardHeader>
-          <CardBody>
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-3 p-3 bg-default-100 rounded-lg">
-                <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-                <div className="flex-grow">
-                  <p className="text-sm font-medium">
-                    Nowy użytkownik zarejestrowany
-                  </p>
-                  <p className="text-xs text-default-600">
-                    JanKowalski dołączył do ligi
-                  </p>
+        {/* Recent Activity */}
+        <div className="w-full max-w-6xl px-4">
+          <Card>
+            <CardHeader>
+              <h3 className={typography({ size: 'lg', weight: 'semibold' })}>
+                Ostatnie aktywności
+              </h3>
+            </CardHeader>
+            <CardBody>
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3 p-3 bg-default-100 rounded-lg">
+                  <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                  <div className="flex-grow">
+                    <p className="text-sm font-medium">
+                      Nowy użytkownik zarejestrowany
+                    </p>
+                    <p className="text-xs text-default-600">
+                      JanKowalski dołączył do ligi
+                    </p>
+                  </div>
+                  <p className="text-xs text-default-500">2 godz. temu</p>
                 </div>
-                <p className="text-xs text-default-500">2 godz. temu</p>
-              </div>
 
-              <div className="flex items-center gap-3 p-3 bg-default-100 rounded-lg">
-                <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
-                <div className="flex-grow">
-                  <p className="text-sm font-medium">Wyścig zakończony</p>
-                  <p className="text-xs text-default-600">
-                    GP Monza - Sezon 2025
-                  </p>
+                <div className="flex items-center gap-3 p-3 bg-default-100 rounded-lg">
+                  <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+                  <div className="flex-grow">
+                    <p className="text-sm font-medium">Wyścig zakończony</p>
+                    <p className="text-xs text-default-600">
+                      GP Monza - Sezon 2025
+                    </p>
+                  </div>
+                  <p className="text-xs text-default-500">5 godz. temu</p>
                 </div>
-                <p className="text-xs text-default-500">5 godz. temu</p>
-              </div>
 
-              <div className="flex items-center gap-3 p-3 bg-default-100 rounded-lg">
-                <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
-                <div className="flex-grow">
-                  <p className="text-sm font-medium">Nowy post dodany</p>
-                  <p className="text-xs text-default-600">
-                    Regulamin sezonu 2025
-                  </p>
+                <div className="flex items-center gap-3 p-3 bg-default-100 rounded-lg">
+                  <div className="h-2 w-2 bg-purple-500 rounded-full"></div>
+                  <div className="flex-grow">
+                    <p className="text-sm font-medium">Nowy post dodany</p>
+                    <p className="text-xs text-default-600">
+                      Regulamin sezonu 2025
+                    </p>
+                  </div>
+                  <p className="text-xs text-default-500">1 dzień temu</p>
                 </div>
-                <p className="text-xs text-default-500">1 dzień temu</p>
               </div>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
-    </section>
+            </CardBody>
+          </Card>
+        </div>
+      </section>
+    </AdminProtectedRoute>
   );
 }
