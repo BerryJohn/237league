@@ -24,10 +24,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <p className="text-sm text-default-400 mb-6">
         {isSearchEmpty
           ? `Nie znaleziono lig pasujących do "${searchValue}"`
-          : 'Nie utworzono jeszcze żadnych lig. Rozpocznij od dodania pierwszej ligi.'}
+          : 'Nie utworzono jeszcze żadnej ligi. Rozpocznij od dodania pierwszej ligi.'}
       </p>
       {!isSearchEmpty && (
-        <Button color="primary" onClick={onAddClick}>
+        <Button color="primary" onPress={onAddClick}>
           Dodaj pierwszą ligę
         </Button>
       )}

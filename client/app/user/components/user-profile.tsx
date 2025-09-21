@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 import { UserProfileHeader } from './user-profile-header';
-import { useApi, userApi } from '@/api';
-import { userDataType } from '@/types/user';
+import { userApi } from '@/api';
+import { useQuery } from '@tanstack/react-query';
 
 interface UserProfileProps {
   steamId?: string; // If provided, fetch user by steamId, otherwise fetch current user
@@ -30,13 +30,9 @@ export function UserProfile({ steamId, isOwnProfile }: UserProfileProps) {
     isError,
     isSuccess,
     refetch,
-  } = useApi<userDataType>(apiFn, {
-    onSuccess: (data) => {
-      console.log('User data loaded:', data);
-    },
-    onError: (error) => {
-      console.error('Error fetching user data:', error);
-    },
+  } = useQuery({
+    queryKey: ['userProfile', steamId],
+    queryFn: apiFn,
   });
 
   if (isLoading || (!isSuccess && !isError)) {
@@ -89,7 +85,7 @@ export function UserProfile({ steamId, isOwnProfile }: UserProfileProps) {
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
       {/* Profile Header */}
-      <UserProfileHeader profile={userData} isOwnProfile={isOwn} />
+      <UserProfileHeader profile={userData.data} isOwnProfile={isOwn} />
     </div>
   );
 }

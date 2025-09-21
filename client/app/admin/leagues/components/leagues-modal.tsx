@@ -16,11 +16,11 @@ import { Select, SelectItem } from '@heroui/select';
 import { League } from '@/types/league';
 import { leagueApi } from '@/api/leagues';
 import { addToast } from '@heroui/toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface LeagueModalProps {
   isOpen: boolean;
   onClose: () => void;
   league?: League; // If provided, this is edit mode
-  isLoading?: boolean;
 }
 
 // Game options for the league
@@ -30,12 +30,7 @@ const GAME_OPTIONS = [
   { key: 'iracing', label: 'iRacing' },
 ];
 
-export function LeagueModal({
-  isOpen,
-  onClose,
-  league,
-  isLoading = false,
-}: LeagueModalProps) {
+export function LeagueModal({ isOpen, onClose, league }: LeagueModalProps) {
   const isEditMode = useMemo(() => !!league, [league]);
 
   const { control, handleSubmit, reset } = useForm<League>({
@@ -57,25 +52,39 @@ export function LeagueModal({
     }
   }, [isOpen, league, reset]);
 
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: isEditMode
+      ? (data: League) => leagueApi.updateLeague(league!.id, data)
+      : (data: League) => leagueApi.createLeague(data),
+    onSuccess: () => {
+      addToast({
+        title: isEditMode
+          ? 'Liga została zaktualizowana pomyślnie.'
+          : 'Liga została utworzona pomyślnie.',
+        color: 'success',
+      });
+      queryClient.invalidateQueries({ queryKey: ['leagues'] });
+      onClose();
+    },
+    onError: (error) => {
+      console.error('Mutation error:', error);
+      addToast({
+        title: isEditMode
+          ? 'Nie udało się zaktualizować ligi. Spróbuj ponownie.'
+          : 'Nie udało się utworzyć ligi. Spróbuj ponownie.',
+        color: 'danger',
+      });
+    },
+  });
+
   const onFormSubmit = async (data: League) => {
-    if (isEditMode && league) {
-      await leagueApi.updateLeague(league.id, data);
-      addToast({
-        title: 'Liga została zaktualizowana pomyślnie.',
-        severity: 'success',
-      });
-    } else {
-      await leagueApi.createLeague(data);
-      addToast({
-        title: 'Liga została utworzona pomyślnie.',
-        severity: 'success',
-      });
-    }
-    onClose();
+    mutate(data);
   };
 
   const handleClose = () => {
-    if (!isLoading) {
+    if (!isPending) {
       onClose();
     }
   };
@@ -86,8 +95,8 @@ export function LeagueModal({
       onClose={handleClose}
       placement="center"
       size="2xl"
-      isDismissable={!isLoading}
-      hideCloseButton={isLoading}
+      isDismissable={!isPending}
+      hideCloseButton={isPending}
     >
       <ModalContent>
         <form onSubmit={handleSubmit(onFormSubmit)}>
@@ -182,16 +191,16 @@ export function LeagueModal({
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="flat" onPress={handleClose} isDisabled={isLoading}>
+            <Button variant="flat" onPress={handleClose} isDisabled={isPending}>
               Anuluj
             </Button>
             <Button
               type="submit"
               color="primary"
-              isLoading={isLoading}
-              isDisabled={isLoading}
+              isLoading={isPending}
+              isDisabled={isPending}
             >
-              {isLoading
+              {isPending
                 ? isEditMode
                   ? 'Aktualizowanie...'
                   : 'Tworzenie...'

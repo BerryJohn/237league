@@ -16,8 +16,12 @@ import { Input } from '@heroui/input';
 import { EmptyState } from './empty-state';
 import { LeagueModal } from './leagues-modal';
 import { League } from '@/types/league';
+import { useQuery } from '@tanstack/react-query';
+import { leagueApi } from '@/api/leagues';
+import { DeleteIcon, EditIcon, EyeIcon } from '@/components/icons';
+import { Tooltip } from '@heroui/tooltip';
 
-const mockLeagues: League[] = [];
+import { DeleteConfirmationModal } from './delete-confirmation-modal';
 
 const columns = [
   { name: 'LIGA', uid: 'name' },
@@ -25,7 +29,7 @@ const columns = [
   { name: 'SEZONY', uid: 'seasons' },
 
   { name: 'DATA UTWORZENIA', uid: 'createdAt' },
-  { name: 'AKCJE', uid: '' },
+  { name: 'AKCJE', uid: 'actions' },
 ];
 
 export const LeaguesTable = () => {
@@ -34,6 +38,15 @@ export const LeaguesTable = () => {
     isOpen: boolean;
     league?: League;
   }>({ isOpen: false });
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean;
+    league?: League;
+  }>({ isOpen: false });
+
+  const { data: leagues } = useQuery({
+    queryKey: ['leagues'],
+    queryFn: leagueApi.getAllLeagues,
+  });
 
   const handleCreateLeague = () => {
     setModalState({ isOpen: true });
@@ -43,12 +56,18 @@ export const LeaguesTable = () => {
     setModalState({ isOpen: true, league });
   };
 
+  const handleDeleteLeague = (league: League) => {
+    setDeleteModalState({ isOpen: true, league });
+  };
+
   const filteredLeagues = useMemo(() => {
-    if (!searchValue) return mockLeagues;
+    if (!leagues) return [];
+
+    if (!searchValue) return leagues.data;
 
     const searchTerm = searchValue.toLowerCase();
 
-    return mockLeagues.filter((league) => {
+    return leagues.data.filter((league) => {
       const matchesName = league.name.toLowerCase().includes(searchTerm);
       const matchesDescription =
         league.description?.toLowerCase().includes(searchTerm) || false;
@@ -56,11 +75,11 @@ export const LeaguesTable = () => {
 
       return matchesName || matchesDescription || matchesGame;
     });
-  }, [searchValue]);
+  }, [searchValue, leagues]);
 
   return (
     <div className="w-full">
-      {mockLeagues.length > 0 ? (
+      {leagues && leagues.data.length > 0 ? (
         <div className="flex items-center justify-between mb-4">
           <Input
             placeholder="Szukaj ligi..."
@@ -79,7 +98,7 @@ export const LeaguesTable = () => {
         <EmptyState searchValue={searchValue} onAddClick={handleCreateLeague} />
       ) : (
         <Table
-          aria-label="Leagues table"
+          aria-label="leagues.data table"
           className="max-h-[70vh] overflow-auto"
           isHeaderSticky
           isStriped
@@ -94,7 +113,12 @@ export const LeaguesTable = () => {
               <TableRow key={item.id}>
                 {(columnKey) => (
                   <TableCell>
-                    {renderCell(item, columnKey as string, handleEditLeague)}
+                    {renderCell(
+                      item,
+                      columnKey as string,
+                      handleEditLeague,
+                      handleDeleteLeague
+                    )}
                   </TableCell>
                 )}
               </TableRow>
@@ -107,29 +131,42 @@ export const LeaguesTable = () => {
         onClose={() => setModalState({ isOpen: false })}
         league={modalState.league}
       />
+
+      <DeleteConfirmationModal
+        isOpen={deleteModalState.isOpen}
+        onClose={() => setDeleteModalState({ isOpen: false })}
+        league={deleteModalState.league}
+      />
     </div>
   );
 };
 
 export default LeaguesTable;
 
+const mappedGames: { [key: string]: string } = {
+  'le-mans-ultimate': 'Le Mans Ultimate',
+  'assetto-corsa-competizione': 'Assetto Corsa Competizione',
+  iracing: 'iRacing',
+};
+
 const renderCell = (
   league: League,
   columnKey: string,
-  onEdit: (league: League) => void
+  onEdit: (league: League) => void,
+  onDelete: (league: League) => void
 ) => {
   switch (columnKey) {
     case 'name':
       return (
         <div className="flex flex-col">
           <p className="text-bold text-small">{league.name}</p>
-          <p className="text-bold text-tiny text-default-400">
+          <p className="text-bold text-tiny text-default-400 max-w-xs truncate">
             {league.description}
           </p>
         </div>
       );
     case 'game':
-      return <span>{league.game}</span>;
+      return <span>{mappedGames[league.game] || league.game}</span>;
     case 'seasons':
       const seasonsCount = league.seasons?.length || 0;
       return (
@@ -165,15 +202,35 @@ const renderCell = (
       return (
         <div className="flex flex-col">
           <p className="text-bold text-tiny text-default-400">
-            {league.createdAt.toLocaleDateString()}
+            {new Date(league.createdAt).toLocaleDateString()}
           </p>
         </div>
       );
     case 'actions':
       return (
-        <Button size="sm" onPress={() => onEdit(league)}>
-          Edit
-        </Button>
+        <div className="relative flex items-center gap-2">
+          <Tooltip content="Details">
+            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <EyeIcon />
+            </span>
+          </Tooltip>
+          <Tooltip content="Edytuj">
+            <span
+              className="text-lg text-default-400 cursor-pointer active:opacity-50"
+              onClick={() => onEdit(league)}
+            >
+              <EditIcon />
+            </span>
+          </Tooltip>
+          <Tooltip color="danger" content="Usuń">
+            <span
+              className="text-lg text-danger cursor-pointer active:opacity-50"
+              onClick={() => onDelete(league)}
+            >
+              <DeleteIcon />
+            </span>
+          </Tooltip>
+        </div>
       );
     default:
       return <span>-</span>;

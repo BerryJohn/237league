@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { userApi } from '@/api';
 import { addToast } from '@heroui/toast';
 import { useAuth } from '@/contexts/auth-context';
+import { useMutation } from '@tanstack/react-query';
 
 interface PersonalData {
   name: string;
@@ -25,7 +26,7 @@ export function PersonalDataCard() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     trigger,
   } = useForm<PersonalData>({
     mode: 'onChange', // Validate on change
@@ -38,20 +39,27 @@ export function PersonalDataCard() {
     },
   });
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: userApi.updateUser,
+  });
+
   useEffect(() => {
     trigger();
   }, [trigger]);
 
   const onSubmit = async (data: PersonalData) => {
-    try {
-      await userApi.updateUser(data);
-      addToast({ title: 'Dane zostały zaktualizowane', color: 'success' });
-    } catch (e) {
-      addToast({
-        title: 'Wystąpił błąd podczas aktualizacji danych',
-        color: 'danger',
-      });
-    }
+    mutate(data, {
+      onSuccess: () => {
+        addToast({ title: 'Dane zostały zaktualizowane', color: 'success' });
+      },
+      onError: (error: any) => {
+        addToast({
+          title: 'Wystąpił błąd podczas aktualizacji danych',
+          description: error?.response?.data?.message || String(error),
+          color: 'danger',
+        });
+      },
+    });
   };
 
   return (
@@ -80,6 +88,7 @@ export function PersonalDataCard() {
                     size="sm"
                     isInvalid={!!errors.name}
                     errorMessage={errors.name?.message}
+                    isRequired
                   />
                 )}
               />
@@ -96,6 +105,7 @@ export function PersonalDataCard() {
                     size="sm"
                     isInvalid={!!errors.surname}
                     errorMessage={errors.surname?.message}
+                    isRequired
                   />
                 )}
               />
@@ -113,6 +123,7 @@ export function PersonalDataCard() {
                     errorMessage={errors.country?.message}
                     selectedKey={field.value}
                     onSelectionChange={(key) => field.onChange(key)}
+                    isRequired
                   >
                     {countries.map((country) => (
                       <AutocompleteItem
@@ -178,7 +189,7 @@ export function PersonalDataCard() {
             variant="solid"
             color="primary"
             size="sm"
-            isLoading={isSubmitting}
+            isLoading={isPending}
             fullWidth
           >
             Zapisz zmiany
