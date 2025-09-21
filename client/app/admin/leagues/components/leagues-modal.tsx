@@ -13,12 +13,12 @@ import { Input } from '@heroui/input';
 import { Textarea } from '@heroui/input';
 import { Button } from '@heroui/button';
 import { Select, SelectItem } from '@heroui/select';
-import { League, CreateLeagueRequest, UpdateLeagueRequest } from '@/types';
-
+import { League } from '@/types/league';
+import { leagueApi } from '@/api/leagues';
+import { addToast } from '@heroui/toast';
 interface LeagueModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: CreateLeagueRequest | UpdateLeagueRequest) => Promise<void>;
   league?: League; // If provided, this is edit mode
   isLoading?: boolean;
 }
@@ -30,28 +30,15 @@ const GAME_OPTIONS = [
   { key: 'iracing', label: 'iRacing' },
 ];
 
-// Form data interface
-interface LeagueFormData {
-  name: string;
-  description: string;
-  game: string;
-}
-
 export function LeagueModal({
   isOpen,
   onClose,
-  onSubmit,
   league,
   isLoading = false,
 }: LeagueModalProps) {
   const isEditMode = useMemo(() => !!league, [league]);
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<LeagueFormData>({
+  const { control, handleSubmit, reset } = useForm<League>({
     defaultValues: {
       name: '',
       description: '',
@@ -70,20 +57,21 @@ export function LeagueModal({
     }
   }, [isOpen, league, reset]);
 
-  const onFormSubmit = async (data: LeagueFormData) => {
-    try {
-      const submitData = {
-        name: data.name.trim(),
-        description: data.description.trim() || undefined,
-        game: data.game,
-      };
-
-      await onSubmit(submitData);
-      onClose();
-    } catch (error) {
-      console.error('Failed to save league:', error);
-      // Error handling could be expanded here
+  const onFormSubmit = async (data: League) => {
+    if (isEditMode && league) {
+      await leagueApi.updateLeague(league.id, data);
+      addToast({
+        title: 'Liga została zaktualizowana pomyślnie.',
+        severity: 'success',
+      });
+    } else {
+      await leagueApi.createLeague(data);
+      addToast({
+        title: 'Liga została utworzona pomyślnie.',
+        severity: 'success',
+      });
     }
+    onClose();
   };
 
   const handleClose = () => {
@@ -187,7 +175,7 @@ export function LeagueModal({
                   maxLength={1000}
                   minRows={3}
                   maxRows={6}
-                  description={`Opcjonalnie - opisz format, zasady lub cele ligi (${field.value.length}/1000)`}
+                  description={`Opcjonalnie - opisz format, zasady lub cele ligi (${field.value?.length ?? 0}/1000)`}
                 />
               )}
             />

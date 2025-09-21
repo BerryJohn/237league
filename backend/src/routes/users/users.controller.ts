@@ -11,7 +11,6 @@ import { UsersService } from './users.service';
 import { type JwtPayload } from 'src/interfaces/user.interface';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
-import { userData } from 'src/interfaces/steam-user.interface';
 import { UpdateUserDto } from 'src/dtos/user.dto';
 
 @Controller('users')

@@ -328,14 +328,6 @@ export interface SeasonFilters {
 }
 
 // League-related types
-export interface League {
-  id: string;
-  name: string;
-  description?: string;
-  createdAt: Date;
-  game: string;
-  seasons?: Season[];
-}
 
 export interface CreateLeagueRequest {
   name: string;

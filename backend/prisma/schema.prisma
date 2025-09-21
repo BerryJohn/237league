@@ -39,12 +39,13 @@ model User {
 
 // League is geneal entity representing a racing league
 model League {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
   createdAt   DateTime @default(now())
   game        String
   seasons     Season[]
+  //TODO: Add creator user and last editor
 }
 
 // Season represents a specific season within a league

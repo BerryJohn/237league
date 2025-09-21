@@ -8,6 +8,7 @@ import { SteamStrategy } from './../../helpers/steam.strategy';
 import { TokenService } from './../../services/token.service';
 import { JwtAuthGuard } from './../../guards/jwt-auth.guard';
 import { UsersModule } from './../users/users.module';
+import { LeagueModule } from '../leagues/league.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from './../users/users.module';
     }),
     ConfigModule,
     forwardRef(() => UsersModule),
+    forwardRef(() => LeagueModule),
   ],
   controllers: [AuthController],
   providers: [AuthService, SteamStrategy, TokenService, JwtAuthGuard],

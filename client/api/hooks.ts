@@ -9,9 +9,12 @@ export interface UseApiState<T> {
   isSuccess: boolean;
 }
 
-export interface UseApiReturn<T> extends UseApiState<T> {
-  refetch: () => Promise<void>;
+export interface UseApiReturn<T, TParams = void> extends UseApiState<T> {
+  refetch: (params?: TParams) => Promise<void>;
   reset: () => void;
+  mutate: TParams extends void
+    ? () => Promise<void>
+    : (params: TParams) => Promise<void>;
 }
 
 export interface UseApiOptions {
@@ -25,10 +28,12 @@ export interface UseApiOptions {
  * @param apiCall - The API function to call
  * @param options - Configuration options
  */
-export function useApi<T = any>(
-  apiCall: () => Promise<AxiosResponse<T>>,
+export function useApi<T = any, TParams = void>(
+  apiCall: TParams extends void
+    ? () => Promise<AxiosResponse<T>>
+    : (params: TParams) => Promise<AxiosResponse<T>>,
   options: UseApiOptions = {}
-): UseApiReturn<T> {
+): UseApiReturn<T, TParams> {
   const { enabled = true, onSuccess, onError } = options;
 
   // Use refs to store the latest callback references
@@ -49,7 +54,7 @@ export function useApi<T = any>(
     isSuccess: false,
   });
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (params?: TParams) => {
     setState((prev) => ({
       ...prev,
       isLoading: true,
@@ -59,7 +64,7 @@ export function useApi<T = any>(
     }));
 
     try {
-      const response = await apiCallRef.current();
+      const response = await (apiCallRef.current as any)(params);
       const data = response.data;
 
       setState({
@@ -108,6 +113,7 @@ export function useApi<T = any>(
     ...state,
     refetch: fetchData,
     reset,
+    mutate: fetchData as any,
   };
 }
 

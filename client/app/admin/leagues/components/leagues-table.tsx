@@ -15,7 +15,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@heroui/popover';
 import { Input } from '@heroui/input';
 import { EmptyState } from './empty-state';
 import { LeagueModal } from './leagues-modal';
-import { League } from '@/types';
+import { League } from '@/types/league';
 
 const mockLeagues: League[] = [];
 
@@ -27,73 +27,6 @@ const columns = [
   { name: 'DATA UTWORZENIA', uid: 'createdAt' },
   { name: 'AKCJE', uid: '' },
 ];
-
-const renderCell = (
-  league: League,
-  columnKey: string,
-  onEdit: (league: League) => void
-) => {
-  switch (columnKey) {
-    case 'name':
-      return (
-        <div className="flex flex-col">
-          <p className="text-bold text-small">{league.name}</p>
-          <p className="text-bold text-tiny text-default-400">
-            {league.description}
-          </p>
-        </div>
-      );
-    case 'game':
-      return <span>{league.game}</span>;
-    case 'seasons':
-      const seasonsCount = league.seasons?.length || 0;
-      return (
-        <Popover placement="bottom" showArrow>
-          <PopoverTrigger>
-            <Chip
-              variant="bordered"
-              color="primary"
-              title={seasonsCount.toString()}
-              className="cursor-pointer"
-            >
-              {seasonsCount}
-            </Chip>
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className="px-1 py-2">
-              {seasonsCount === 0 ? (
-                <div className="text-tiny text-default-400">
-                  Brak stworzonych sezonów
-                </div>
-              ) : (
-                league.seasons?.map((season) => (
-                  <div key={season.id} className="text-tiny">
-                    {season.name}
-                  </div>
-                ))
-              )}
-            </div>
-          </PopoverContent>
-        </Popover>
-      );
-    case 'createdAt':
-      return (
-        <div className="flex flex-col">
-          <p className="text-bold text-tiny text-default-400">
-            {league.createdAt.toLocaleDateString()}
-          </p>
-        </div>
-      );
-    case 'actions':
-      return (
-        <Button size="sm" onPress={() => onEdit(league)}>
-          Edit
-        </Button>
-      );
-    default:
-      return <span>-</span>;
-  }
-};
 
 export const LeaguesTable = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -172,10 +105,6 @@ export const LeaguesTable = () => {
       <LeagueModal
         isOpen={modalState.isOpen}
         onClose={() => setModalState({ isOpen: false })}
-        onSubmit={async (data) => {
-          // TODO: Implement actual submit logic
-          console.log('Submit data:', data);
-        }}
         league={modalState.league}
       />
     </div>
@@ -183,3 +112,70 @@ export const LeaguesTable = () => {
 };
 
 export default LeaguesTable;
+
+const renderCell = (
+  league: League,
+  columnKey: string,
+  onEdit: (league: League) => void
+) => {
+  switch (columnKey) {
+    case 'name':
+      return (
+        <div className="flex flex-col">
+          <p className="text-bold text-small">{league.name}</p>
+          <p className="text-bold text-tiny text-default-400">
+            {league.description}
+          </p>
+        </div>
+      );
+    case 'game':
+      return <span>{league.game}</span>;
+    case 'seasons':
+      const seasonsCount = league.seasons?.length || 0;
+      return (
+        <Popover placement="bottom" showArrow>
+          <PopoverTrigger>
+            <Chip
+              variant="bordered"
+              color="primary"
+              title={seasonsCount.toString()}
+              className="cursor-pointer"
+            >
+              {seasonsCount}
+            </Chip>
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="px-1 py-2">
+              {seasonsCount === 0 ? (
+                <div className="text-tiny text-default-400">
+                  Brak stworzonych sezonów
+                </div>
+              ) : (
+                league.seasons?.map((season) => (
+                  <div key={season.id} className="text-tiny">
+                    {season.name}
+                  </div>
+                ))
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
+      );
+    case 'createdAt':
+      return (
+        <div className="flex flex-col">
+          <p className="text-bold text-tiny text-default-400">
+            {league.createdAt.toLocaleDateString()}
+          </p>
+        </div>
+      );
+    case 'actions':
+      return (
+        <Button size="sm" onPress={() => onEdit(league)}>
+          Edit
+        </Button>
+      );
+    default:
+      return <span>-</span>;
+  }
+};
