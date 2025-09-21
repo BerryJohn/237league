@@ -79,7 +79,7 @@ export function LeagueModal({ isOpen, onClose, league }: LeagueModalProps) {
     },
   });
 
-  const onFormSubmit = async (data: League) => {
+  const onFormSubmit = (data: League) => {
     mutate(data);
   };
 

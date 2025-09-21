@@ -15,8 +15,11 @@ import { Progress } from '@heroui/progress';
 import { EmptyState } from './empty-state';
 import { SeasonActions } from './season-actions';
 import { SeasonStatusChip } from './season-status-chip';
-import { mockSeasons } from './mock-data';
-import { Season } from '@shared/types';
+import { SeasonModal } from './season-modal';
+import { SeasonDeleteConfirmationModal } from './season-delete-confirmation-modal';
+import type { Season } from '@shared/types';
+import { useQuery } from '@tanstack/react-query';
+import { seasonsApi } from '@/api/seasons';
 
 const columns = [
   { name: 'SEZON', uid: 'name' },
@@ -30,21 +33,30 @@ const columns = [
 
 export const SeasonsTable = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [seasons] = useState<Season[]>(mockSeasons);
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    season?: Season;
+  }>({ isOpen: false });
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean;
+    season?: Season;
+  }>({ isOpen: false });
+
+  const { data: seasons } = useQuery({
+    queryKey: ['seasons'],
+    queryFn: seasonsApi.getAllSeasons,
+  });
 
   const handleCreateSeason = () => {
-    console.log('Create season clicked');
-    // TODO: Implement create season modal
+    setModalState({ isOpen: true });
   };
 
   const handleEditSeason = (season: Season) => {
-    console.log('Edit season:', season);
-    // TODO: Implement edit season modal
+    setModalState({ isOpen: true, season });
   };
 
   const handleDeleteSeason = (season: Season) => {
-    console.log('Delete season:', season);
-    // TODO: Implement delete season modal
+    setDeleteModalState({ isOpen: true, season });
   };
 
   const handleViewSeason = (season: Season) => {
@@ -53,11 +65,13 @@ export const SeasonsTable = () => {
   };
 
   const filteredSeasons = useMemo(() => {
-    if (!searchValue) return seasons;
+    if (!seasons) return [];
+
+    if (!searchValue) return seasons.data;
 
     const searchTerm = searchValue.toLowerCase();
 
-    return seasons.filter((season) => {
+    return seasons.data.filter((season) => {
       const matchesName = season.name.toLowerCase().includes(searchTerm);
       const matchesLeague = season.leagueId.toLowerCase().includes(searchTerm);
       const matchesYear = season.startDate
@@ -73,7 +87,7 @@ export const SeasonsTable = () => {
 
   return (
     <div className="w-full">
-      {seasons && seasons.length > 0 ? (
+      {seasons && seasons.data.length > 0 ? (
         <div className="flex items-center justify-between mb-4">
           <Input
             placeholder="Szukaj sezonu..."
@@ -121,6 +135,18 @@ export const SeasonsTable = () => {
           </TableBody>
         </Table>
       )}
+
+      <SeasonModal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ isOpen: false })}
+        season={modalState.season}
+      />
+
+      <SeasonDeleteConfirmationModal
+        isOpen={deleteModalState.isOpen}
+        onClose={() => setDeleteModalState({ isOpen: false })}
+        season={deleteModalState.season}
+      />
     </div>
   );
 };
@@ -150,7 +176,7 @@ const renderCell = (
         </div>
       );
     case 'status':
-      return <SeasonStatusChip isFinished={season.isFinished} />;
+      return <SeasonStatusChip season={season} />;
     case 'progress':
       const totalRaces = season.races?.length || 0;
       // For demo purposes, let's assume some races are completed based on season status

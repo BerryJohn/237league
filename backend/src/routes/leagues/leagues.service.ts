@@ -3,7 +3,7 @@ import { League } from 'src/interfaces/leagues.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class LeagueService {
+export class LeaguesService {
   constructor(private prisma: PrismaService) {}
 
   async getAllLeagues() {

@@ -9,22 +9,22 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AdminGuard } from 'src/guards/admin.guard';
-import { LeagueService } from './league.service';
+import { LeaguesService } from './leagues.service';
 import { CreateLeagueDto } from 'src/dtos/leagues.dto';
 
 @Controller('leagues')
-export class LeagueController {
-  constructor(private leagueService: LeagueService) {}
+export class LeaguesController {
+  constructor(private leaguesService: LeaguesService) {}
 
   @Get()
   getLeagues() {
-    return this.leagueService.getAllLeagues();
+    return this.leaguesService.getAllLeagues();
   }
 
   @Post()
   @UseGuards(AdminGuard)
   createLeague(@Body() body: CreateLeagueDto) {
-    return this.leagueService.createLeague(body);
+    return this.leaguesService.createLeague(body);
   }
 
   @UseGuards(AdminGuard)
@@ -33,12 +33,12 @@ export class LeagueController {
     @Param('id') id: string,
     @Body() body: Partial<CreateLeagueDto>,
   ) {
-    return this.leagueService.updateLeague(id, body);
+    return this.leaguesService.updateLeague(id, body);
   }
 
   @UseGuards(AdminGuard)
   @Delete(':id')
   deleteLeague(@Param('id') id: string) {
-    return this.leagueService.deleteLeague(id);
+    return this.leaguesService.deleteLeague(id);
   }
 }

@@ -35,6 +35,7 @@ export interface Season<T = string> {
   createdAt: T; // ISO string or Date
   leagueId: string;
   races?: Race[];
+  status: 'upcoming' | 'ongoing' | 'finished' | 'cancelled';
 }
 
 export interface Race<T = string> {

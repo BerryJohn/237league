@@ -52,6 +52,7 @@ model League {
 model Season {
   id         String    @id @default(uuid())
   name       String
+  status     SeasonStatus @default(upcoming)
   isFinished Boolean   @default(false)
   startDate  DateTime?
   endDate    DateTime?
@@ -63,6 +64,13 @@ model Season {
   races Race[]
 
   @@unique([leagueId, name])
+}
+
+enum SeasonStatus {
+  upcoming
+  ongoing
+  finished
+  cancelled
 }
 
 model Race {
