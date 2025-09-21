@@ -2,10 +2,10 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { TokenManager } from '../utils/token-manager';
-import { userDataType } from '@/types/user';
+import type { User } from '@shared/types';
 
 interface AuthContextType {
-  user: userDataType | null;
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: () => void;
@@ -16,7 +16,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<userDataType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const checkAuthStatus = async () => {

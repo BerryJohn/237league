@@ -6,11 +6,11 @@ import { Avatar } from '@heroui/avatar';
 import { Link } from '@heroui/link';
 import { Divider } from '@heroui/divider';
 import { createSteamAvatarURL } from '@/utils/helpers';
-import { userDataType } from '@/types/user';
+import type { User } from '@shared/types';
 import { user } from '@heroui/theme';
 
 interface UserProfileHeaderProps {
-  profile: userDataType;
+  profile: User;
   isOwnProfile: boolean;
 }
 

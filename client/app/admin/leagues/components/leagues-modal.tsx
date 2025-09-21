@@ -13,7 +13,7 @@ import { Input } from '@heroui/input';
 import { Textarea } from '@heroui/input';
 import { Button } from '@heroui/button';
 import { Select, SelectItem } from '@heroui/select';
-import { League } from '@/types/league';
+import { League } from '@shared/types';
 import { leagueApi } from '@/api/leagues';
 import { addToast } from '@heroui/toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

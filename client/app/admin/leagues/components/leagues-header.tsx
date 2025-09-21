@@ -1,5 +1,4 @@
 import { title } from '@/components/primitives';
-import { Button } from '@heroui/button';
 
 export default function LeaguesHeader() {
   return (

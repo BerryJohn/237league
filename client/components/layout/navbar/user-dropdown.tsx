@@ -13,11 +13,11 @@ import { useRouter } from 'next/navigation';
 
 import { SettingsIcon, LogoutIcon, AdminIcon } from '@/components/icons';
 import { createSteamAvatarURL } from '@/utils/helpers';
-import { userDataType } from '@/types/user';
+import type { User } from '@shared/types';
 import { useAuth } from '@/contexts/auth-context';
 
 interface UserDropdownProps {
-  user: userDataType;
+  user: User;
   onLogout: () => void;
 }
 

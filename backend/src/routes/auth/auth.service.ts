@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TokenService } from './../../services/token.service';
-import { User } from './../../interfaces/user.interface';
+import { User } from 'src/shared/types';
 import { UsersService } from './../users/users.service';
 import { SteamUserData } from 'src/interfaces/steam-user.interface';
 
@@ -22,8 +22,8 @@ export class AuthService {
   }
 
   async loginUser(
-    user: User,
-  ): Promise<{ accessToken: string; refreshToken: string; user: User }> {
+    user: User<Date>,
+  ): Promise<{ accessToken: string; refreshToken: string; user: User<Date> }> {
     const accessToken = this.tokenService.generateAccessToken(user);
     const refreshToken = this.tokenService.generateRefreshToken(user);
 
@@ -46,7 +46,7 @@ export class AuthService {
       return null;
     }
 
-    const user = await this.validateUser(payload.sub);
+    const user = (await this.validateUser(payload.sub)) as User<Date>;
     if (!user) {
       return null;
     }

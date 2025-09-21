@@ -2,10 +2,10 @@ import { Card, CardHeader, CardBody } from '@heroui/card';
 import { User } from '@heroui/user';
 import { Input } from '@heroui/input';
 import { createSteamAvatarURL } from '@/utils/helpers';
-import type { userDataType } from '@/types/user';
+import type { User } from '@shared/types';
 
 interface ProfileOverviewCardProps {
-  user: userDataType;
+  user: User;
 }
 
 export function ProfileOverviewCard({ user }: ProfileOverviewCardProps) {

@@ -3,12 +3,12 @@
 import { Button } from '@heroui/button';
 
 import { UserDropdown } from './user-dropdown';
-import { userDataType } from '@/types/user';
+import type { User } from '@shared/types';
 
 interface AuthButtonProps {
   isLoading: boolean;
   isAuthenticated: boolean;
-  user: userDataType | null;
+  user: User | null;
   onLogin: () => void;
   onLogout: () => void;
 }

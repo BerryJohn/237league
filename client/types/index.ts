@@ -5,26 +5,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 };
 
 // User-related types
-export interface UserProfile {
-  id: string;
-  steamId: string;
-  username: string;
-  displayName: string;
-  avatar: string;
-  email?: string;
-  bio?: string;
-  country?: string;
-  isOnline: boolean;
-  lastSeen: Date;
-  createdAt: Date;
-  // Steam auth fields (read-only)
-  steamProfile: {
-    profileUrl: string;
-    realName?: string;
-    country?: string;
-  };
-}
-
 export interface UserStats {
   totalRaces: number;
   bestWpm: number;
@@ -55,18 +35,6 @@ export interface RecentRace {
   createdAt: Date;
   textId: string;
   textPreview: string;
-}
-
-export interface EditableUserData {
-  displayName: string;
-  bio: string;
-  email: string;
-  country: string;
-}
-
-export interface UserPageProps {
-  userId?: string; // If provided, show another user's profile
-  isOwnProfile: boolean;
 }
 
 // Event-related types for Le Mans Ultimate racing league
@@ -185,24 +153,6 @@ export interface EventFilters {
 }
 
 // Season/Championship-related types
-export interface Season {
-  id: string;
-  name: string;
-  description: string;
-  year: number;
-  status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
-  startDate: Date;
-  endDate: Date;
-  totalRounds: number;
-  completedRounds: number;
-  pointsSystem: PointsSystem;
-  categories: ChampionshipCategory[];
-  standings: ChampionshipStandings[];
-  rounds: SeasonRound[];
-  regulations?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export interface PointsSystem {
   id: string;
@@ -325,20 +275,6 @@ export interface SeasonFilters {
   year?: number;
   status?: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
   category?: string;
-}
-
-// League-related types
-
-export interface CreateLeagueRequest {
-  name: string;
-  description?: string;
-  game: string;
-}
-
-export interface UpdateLeagueRequest {
-  name?: string;
-  description?: string;
-  game?: string;
 }
 
 // News-related types

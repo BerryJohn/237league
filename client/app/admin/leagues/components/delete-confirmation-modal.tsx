@@ -9,7 +9,7 @@ import {
   ModalFooter,
 } from '@heroui/modal';
 import { Button } from '@heroui/button';
-import { League } from '@/types/league';
+import { League } from '@shared/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { leagueApi } from '@/api/leagues';
 import { addToast } from '@heroui/toast';

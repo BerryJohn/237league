@@ -15,7 +15,7 @@ import { Popover, PopoverTrigger, PopoverContent } from '@heroui/popover';
 import { Input } from '@heroui/input';
 import { EmptyState } from './empty-state';
 import { LeagueModal } from './leagues-modal';
-import { League } from '@/types/league';
+import { League } from '@shared/types';
 import { useQuery } from '@tanstack/react-query';
 import { leagueApi } from '@/api/leagues';
 import { DeleteIcon, EditIcon, EyeIcon } from '@/components/icons';

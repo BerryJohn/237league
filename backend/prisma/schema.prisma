@@ -50,7 +50,7 @@ model League {
 
 // Season represents a specific season within a league
 model Season {
-  id         String    @id @default(cuid())
+  id         String    @id @default(uuid())
   name       String
   isFinished Boolean   @default(false)
   startDate  DateTime?

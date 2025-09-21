@@ -1,5 +1,5 @@
 import { apiClient, AxiosResponse } from './client';
-import { League } from '@/types/league';
+import { League } from '@shared/types';
 
 // League-related API functions
 export const leagueApi = {

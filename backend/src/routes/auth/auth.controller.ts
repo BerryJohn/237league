@@ -1,17 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import type { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './../../guards/jwt-auth.guard';
 import { ConfigService } from '@nestjs/config';
+import { User } from 'src/shared/types';
 
 @Controller('auth')
 export class AuthController {
@@ -32,11 +25,13 @@ export class AuthController {
     try {
       let isNewUser = false;
       // Find or create user from Steam profile
-      let user = await this.authService.findUser(req.user);
+      let user = (await this.authService.findUser(req.user)) as User<Date>;
 
       if (!user) {
         // If user not found, create a new user
-        const newUser = await this.authService.createUser(req.user);
+        const newUser = (await this.authService.createUser(
+          req.user,
+        )) as User<Date>;
         if (!newUser) {
           throw new Error('User creation failed');
         }
