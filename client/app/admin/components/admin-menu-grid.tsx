@@ -31,6 +31,14 @@ const adminMenuItems: AdminMenuItem[] = [
     color: 'primary',
     available: true,
   },
+  {
+    title: 'Zarządzanie wyścigami',
+    description: 'Dodaj, edytuj lub usuń wyścigi w sezonie.',
+    icon: CalendarIcon,
+    href: '/admin/races',
+    color: 'danger',
+    available: true,
+  },
 ];
 
 interface AdminMenuCardProps {
