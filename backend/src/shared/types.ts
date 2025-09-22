@@ -42,11 +42,12 @@ export interface Race<T = string> {
   id: string;
   name: string;
   trackName: string;
-  description?: string;
+  description: string | null;
   raceDate: T;
   createdAt: T;
-  seasonId?: string;
+  seasonId: string | null;
   results?: RaceResult[];
+  game: string | null;
 }
 
 export interface RaceResult<T = string> {

@@ -74,7 +74,7 @@ enum SeasonStatus {
 }
 
 model Race {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String
   trackName   String
   description String?
@@ -82,8 +82,10 @@ model Race {
   createdAt   DateTime @default(now())
 
   // Relation: A race MAY belong to a season, but doesn't have to.
-  seasonId String?
-  season   Season? @relation(fields: [seasonId], references: [id])
+  seasonId    String?
+  season      Season? @relation(fields: [seasonId], references: [id])
+
+  game        String? 
 
   results RaceResult[]
 }
